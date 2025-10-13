@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EuPaciente - Painel Médico</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <h2>EuPaciente</h2>
+    <ul>
+      <li class="active" onclick="mostrarTela('dashboard')">🏠 Início</li>
+      <li onclick="mostrarTela('agenda')">🗓️ Agenda do Dia</li>
+      <li onclick="mostrarTela('receitas')">💊 Receitas</li>
+      <li onclick="mostrarTela('ficha')">📄 Ficha Médica</li>
+      <li onclick="mostrarTela('financeiro')">💰 Financeiro</li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <header>
+      <h1 id="titulo-pagina">Dashboard</h1>
+      <button class="logout">Sair</button>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="conteudo ativo">
+      <h2>Bem-vindo, Dr. João!</h2>
+      <p>Selecione uma opção no menu ao lado para gerenciar seus pacientes e consultas.</p>
+      <div class="cards">
+        <div class="card">
+          <h3>Consultas Hoje</h3>
+          <p>5</p>
+        </div>
+        <div class="card">
+          <h3>Receitas Emitidas</h3>
+          <p>12</p>
+        </div>
+        <div class="card">
+          <h3>Ganhos do Mês</h3>
+          <p>R$ 3.250,00</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGENDA -->
+    <section id="agenda" class="conteudo">
+      <h2>Agenda do Dia</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Horário</th>
+            <th>Paciente</th>
+            <th>Motivo</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-agenda">
+          <tr>
+            <td>09:00</td>
+            <td>Ana Souza</td>
+            <td>Retorno</td>
+            <td>Confirmada</td>
+          </tr>
+          <tr>
+            <td>10:30</td>
+            <td>Bruno Lima</td>
+            <td>Consulta Inicial</td>
+            <td>Pendente</td>
+          </tr>
+          <tr>
+            <td>13:00</td>
+            <td>Maria Oliveira</td>
+            <td>Exames</td>
+            <td>Confirmada</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- RECEITAS -->
+    <section id="receitas" class="conteudo">
+      <h2>Gerar Receita Médica</h2>
+      <form id="form-receita">
+        <label>Paciente:</label>
+        <input type="text" placeholder="Nome do paciente" required>
+
+        <label>Medicamento:</label>
+        <input type="text" placeholder="Nome do medicamento" required>
+
+        <label>Dosagem / Observações:</label>
+        <textarea placeholder="Ex: Tomar 1 comprimido ao dia por 7 dias"></textarea>
+
+        <button type="submit">Gerar Receita</button>
+      </form>
+      <div id="lista-receitas">
+        <h3>Receitas Emitidas</h3>
+        <ul></ul>
+      </div>
+    </section>
+
+    <!-- FICHA MÉDICA -->
+    <section id="ficha" class="conteudo">
+      <h2>Ficha Médica do Paciente</h2>
+      <div class="ficha">
+        <p><strong>Nome:</strong> Ana Souza</p>
+        <p><strong>Idade:</strong> 32 anos</p>
+        <p><strong>Histórico:</strong> Hipertensão leve, acompanhamento anual.</p>
+        <p><strong>Última consulta:</strong> 02/10/2025</p>
+      </div>
+    </section>
+
+    <!-- FINANCEIRO -->
+    <section id="financeiro" class="conteudo">
+      <h2>Financeiro</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>01/10/2025</td><td>Consulta - Ana Souza</td><td>R$ 250,00</td></tr>
+          <tr><td>02/10/2025</td><td>Consulta - Bruno Lima</td><td>R$ 180,00</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
