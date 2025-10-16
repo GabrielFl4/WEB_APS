@@ -9,7 +9,7 @@ public class EuPacienteApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EuPacienteApplication.class, args);
 
-		System.out.println("Teste");
+		System.out.println("Iniciando Servidor");
 	}
 
 }
