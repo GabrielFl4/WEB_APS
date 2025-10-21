@@ -62,3 +62,10 @@ form?.addEventListener("submit", (e) => {
 
 // Chama a função para carregar as receitas assim que a página é aberta.
 document.addEventListener('DOMContentLoaded', carregarReceitas);
+
+const botaoSair = document.querySelector('.logout');
+
+botaoSair?.addEventListener('click', () => {
+  alert('Você foi desconectado.');
+  window.location.href = 'Login.html';
+});

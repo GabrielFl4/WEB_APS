@@ -2,13 +2,18 @@ package br.edu.unifaj.poo.eu_paciente.Model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class Receita {
 
     private Long idReceita;
 
     @NotBlank(message = "O nome do paciente é obrigatório!")
     private String nomePaciente;
+    //todo, Uma Receita precisa pertencer a um Paciente - Não apenas a seu nome!
 
     @NotBlank(message = "O preenchimento do campo é obrigatório!")
     private String nomeMedicamento;
@@ -26,19 +31,4 @@ public class Receita {
         this.idReceita = idReceita;
     }
 
-    public Long getIdReceita() {return idReceita;}
-
-    public void setIdReceita(Long idReceita) {this.idReceita = idReceita;}
-
-    public String getNomePaciente() {return nomePaciente;}
-
-    public void setNomePaciente(String nomePaciente) {this.nomePaciente = nomePaciente;}
-
-    public String getNomeMedicamento() {return nomeMedicamento;}
-
-    public void setNomeMedicamento(String nomeMedicamento) {this.nomeMedicamento = nomeMedicamento;}
-
-    public String getDescricaoUsoMedicamento() {return descricaoUsoMedicamento;}
-
-    public void setDescricaoUsoMedicamento(String descricaoUsoMedicamento) {this.descricaoUsoMedicamento = descricaoUsoMedicamento;}
 }
