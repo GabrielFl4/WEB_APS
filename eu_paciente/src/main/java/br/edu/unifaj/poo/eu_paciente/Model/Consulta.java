@@ -13,21 +13,14 @@ import java.time.LocalDateTime;
 public class Consulta {
 
     private Long id;
-
     private LocalDateTime dataHora;
-
     private String sintomas;
-
     private StatusAndamentoConsulta statusAndamento;
-
     private StatusMotivoConsulta statusMotivo;
-
     private BigDecimal valor;
-
-    private boolean ConsultaPaga;
+    private boolean consultaPaga;
 
     private Paciente paciente;
-
     private Medico medico;
 
 
@@ -35,7 +28,7 @@ public class Consulta {
     }
 
     public Consulta(boolean consultaPaga, BigDecimal valor, String sintomas, LocalDateTime dataHora, Long id, StatusAndamentoConsulta statusAndamento, StatusMotivoConsulta statusMotivo, Paciente paciente, Medico medico) {
-        ConsultaPaga = consultaPaga;
+        this.consultaPaga = consultaPaga;
         this.valor = valor;
         this.sintomas = sintomas;
         this.dataHora = dataHora;

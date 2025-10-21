@@ -27,19 +27,19 @@
     <!-- DASHBOARD -->
     <section id="dashboard" class="conteudo ativo">
       <h2>Bem-vindo, Dr. João!</h2>
-      <p>Selecione uma opção no menu ao lado para gerenciar seus pacientes e consultas.</p>
+      <p>Selecione uma opção no menu ao lado para gerenciar os seus pacientes e consultas.</p>
       <div class="cards">
         <div class="card">
           <h3>Consultas Hoje</h3>
-          <p>5</p>
+          <p id="card-consultas">--</p>
         </div>
         <div class="card">
           <h3>Receitas Emitidas</h3>
-          <p>12</p>
+          <p id="card-receitas">--</p>
         </div>
         <div class="card">
           <h3>Ganhos do Mês</h3>
-          <p>R$ 3.250,00</p>
+          <p id="card-ganhos">--</p>
         </div>
       </div>
     </section>
@@ -57,24 +57,6 @@
           </tr>
         </thead>
         <tbody id="tabela-agenda">
-          <tr>
-            <td>09:00</td>
-            <td>Ana Souza</td>
-            <td>Retorno</td>
-            <td>Confirmada</td>
-          </tr>
-          <tr>
-            <td>10:30</td>
-            <td>Bruno Lima</td>
-            <td>Consulta Inicial</td>
-            <td>Pendente</td>
-          </tr>
-          <tr>
-            <td>13:00</td>
-            <td>Maria Oliveira</td>
-            <td>Exames</td>
-            <td>Confirmada</td>
-          </tr>
         </tbody>
       </table>
     </section>
@@ -122,9 +104,7 @@
             <th>Valor</th>
           </tr>
         </thead>
-        <tbody>
-          <tr><td>01/10/2025</td><td>Consulta - Ana Souza</td><td>R$ 250,00</td></tr>
-          <tr><td>02/10/2025</td><td>Consulta - Bruno Lima</td><td>R$ 180,00</td></tr>
+        <tbody id="tabela-financeiro">
         </tbody>
       </table>
     </section>
