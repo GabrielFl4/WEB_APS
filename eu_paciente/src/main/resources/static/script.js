@@ -97,11 +97,19 @@ async function carregarReceitas() {
   listaReceitas.innerHTML = '<li>Carregando...</li>';
   try {
       const response = await fetch('http://localhost:8080/api/receitas');
+
       const dados = await response.json();
       listaReceitas.innerHTML = '';
+
+      if (dados.length === 0) {
+              listaReceitas.innerHTML = '<li>Nenhuma receita emitida.</li>';
+              return;
+      }
+
       dados.forEach(receita => {
           const item = document.createElement("li");
-          item.textContent = `${receita.paciente.nome} - ${receita.itens[0].nomeMedicamento}`; // Exemplo
+
+          item.textContent = `${receita.nomePaciente} - ${receita.nomeMedicamento}`;
           listaReceitas.appendChild(item);
       });
   } catch (error) {
@@ -139,6 +147,41 @@ function mostrarTela(id) {
 // --- ENVIO DO FORMULÁRIO DE NOVA RECEITA ---
 formReceita?.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+try {
+    // 2. Coletar os dados do formulário
+    const paciente = formReceita.querySelector("input[placeholder='Nome do paciente']").value;
+    const medicamento = formReceita.querySelector("input[placeholder='Nome do medicamento']").value;
+    const observacoes = formReceita.querySelector("textarea").value;
+
+    // 3. Montar o objeto JSON para o backend
+    const dados = {
+      nomePaciente: paciente,
+      nomeMedicamento: medicamento,
+      descricaoUsoMedicamento: observacoes
+    };
+
+    // 4. Enviar os dados para o backend
+    const response = await fetch('http://localhost:8080/api/receitas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dados)
+    });
+
+    if (!response.ok) {
+      throw new Error('Falha ao salvar. O servidor respondeu com um erro.');
+    }
+
+    // 5. Se deu tudo certo:
+    carregarReceitas();
+    formReceita.reset();
+    alert("Receita gerada e salva com sucesso!");
+
+  } catch (error) {
+    // 6. Se deu algum erro na comunicação:
+    console.error("Erro ao gerar receita:", error);
+    alert("Não foi possível salvar a receita. Verifique o console para mais detalhes.");
+  }
 });
 
 // --- ATUALIZAÇÃO DE STATUS DA CONSULTA ---
