@@ -11,5 +11,4 @@ public class EuPacienteApplication {
 
 		System.out.println("Iniciando Servidor");
 	}
-
 }
