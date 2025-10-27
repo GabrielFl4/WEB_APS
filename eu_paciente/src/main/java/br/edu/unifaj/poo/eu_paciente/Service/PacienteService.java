@@ -46,6 +46,7 @@ public class PacienteService {
 
         for (Paciente p : listaDePacientes){
             if(p.getEmail().equals(email) && p.getSenha().equals(senha)){
+                System.out.println("ANDROID - Usuário '" + email + "' autenticado com sucesso!");
                 return Optional.of(p);
             } else if (p.getEmail().equals(email)) {
                 System.out.println("ANDROID - A senha '" + senha + "' não corresponde ao email: " + email);
