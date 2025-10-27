@@ -8,7 +8,7 @@ public class EuPacienteApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EuPacienteApplication.class, args);
-
-		System.out.println("Iniciando Servidor");
+		System.out.println();
+		System.out.println("Servidor Iniciado!");
 	}
 }
