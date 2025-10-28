@@ -25,8 +25,8 @@ public class ConsultaService {
         //Todo, HARDCODE GERADO POR IA, MOTIVO: OTIMIZAÇÃO DE TEMPO (PREGUIÇA)
 
         Medico medicoTeste = new Medico(1L, "Dr. João Silva", "joao.silva@email.com", "1234", "Cardiologista");
-        Paciente paciente1 = new Paciente(1L, "Ana Souza", "32", "ana.souza@email.com", "senha1");
-        Paciente paciente2 = new Paciente(2L, "Bruno Lima", "40", "bruno.lima@email.com", "senha2");
+        Paciente paciente1 = new Paciente(1L, "Ana Souza", "32","62927499277", "ana.souza@email.com", "senha1");
+        Paciente paciente2 = new Paciente(2L, "Bruno Lima", "40","88729477222", "bruno.lima@email.com", "senha2");
 
         listaDeConsultas.add(new Consulta(
                 false,

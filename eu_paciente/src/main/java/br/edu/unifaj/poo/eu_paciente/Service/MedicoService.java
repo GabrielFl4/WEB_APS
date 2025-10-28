@@ -1,6 +1,6 @@
 package br.edu.unifaj.poo.eu_paciente.Service;
 
-import br.edu.unifaj.poo.eu_paciente.DTO.LoginDTO;
+import br.edu.unifaj.poo.eu_paciente.DTO.LoginRequest;
 import br.edu.unifaj.poo.eu_paciente.Model.Medico;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +18,14 @@ public class MedicoService {
         this.listaDeMedicos.add(medicoTeste);
     }
 
-    public boolean verificaLogin(LoginDTO loginDTO){
+    public boolean verificaLogin(LoginRequest loginRequest){
 
         for (Medico medico: listaDeMedicos){
 
-            boolean emailCorresponde = medico.getEmail().equals(loginDTO.email());
+            boolean emailCorresponde = medico.getEmail().equals(loginRequest.email());
 
             if (emailCorresponde) {
-                boolean senhaCorresponde = medico.getSenha().equals(loginDTO.senha());
+                boolean senhaCorresponde = medico.getSenha().equals(loginRequest.senha());
 
                 if (senhaCorresponde) {
                     System.out.println("Login bem-sucedido para: " + medico.getNome());
@@ -34,7 +34,7 @@ public class MedicoService {
             }
         }
 
-        System.out.println("Falha no login para o email: " + loginDTO.email());
+        System.out.println("Falha no login para o email: " + loginRequest.email());
         return false;
     }
 

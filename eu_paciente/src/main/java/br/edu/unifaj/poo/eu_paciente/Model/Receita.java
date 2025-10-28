@@ -11,24 +11,24 @@ public class Receita {
 
     private Long idReceita;
 
-    @NotBlank(message = "O nome do paciente é obrigatório!")
-    private String nomePaciente;
-    //todo, Uma Receita precisa pertencer a um Paciente - Não apenas a seu nome!
+    private Paciente paciente;
 
-    @NotBlank(message = "O preenchimento do campo é obrigatório!")
     private String nomeMedicamento;
-
-    @NotBlank(message = "A especificação de uso do medicamento é obrigatória!")
     private String descricaoUsoMedicamento;
 
     public Receita(){
     }
 
-    public Receita(Long idReceita, String nomePaciente, String nomeMedicamento, String descricaoUsoMedicamento) {
-        this.nomePaciente = nomePaciente;
+    public Receita(Long idReceita, Paciente paciente, String nomeMedicamento, String descricaoUsoMedicamento) {
+        this.idReceita = idReceita;
+        this.paciente = paciente;
         this.nomeMedicamento = nomeMedicamento;
         this.descricaoUsoMedicamento = descricaoUsoMedicamento;
-        this.idReceita = idReceita;
     }
 
+    public Receita(Paciente paciente, String nomeMedicamento, String descricaoUsoMedicamento) {
+        this.paciente = paciente;
+        this.nomeMedicamento = nomeMedicamento;
+        this.descricaoUsoMedicamento = descricaoUsoMedicamento;
+    }
 }

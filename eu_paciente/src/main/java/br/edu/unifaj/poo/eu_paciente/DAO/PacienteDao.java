@@ -1,4 +1,4 @@
-package br.edu.unifaj.poo.eu_paciente.Dao;
+package br.edu.unifaj.poo.eu_paciente.DAO;
 
 import br.edu.unifaj.poo.eu_paciente.Model.Paciente;
 import br.edu.unifaj.poo.eu_paciente.Service.PacienteService;
