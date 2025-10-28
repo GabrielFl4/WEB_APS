@@ -1,6 +1,12 @@
 // ==========================================================
 // 1. DECLARAÇÃO DAS CONSTANTES GLOBAIS
 // ==========================================================
+const inputCpf = document.getElementById('input-cpf');
+const inputPacienteId = document.getElementById('input-paciente-id');
+const inputPacienteNome = document.getElementById('input-paciente-nome');
+const inputMedicamento = document.getElementById('input-medicamento');
+const inputObservacoes = document.getElementById('input-observacoes');
+
 // Pegamos todos os elementos da página que vamos manipular
 const tituloPagina = document.getElementById('titulo-pagina');
 
@@ -24,16 +30,16 @@ const botaoSair = document.querySelector('.logout');
 // --- CARREGA OS DADOS DO DASHBOARD ---
 async function carregarDashboard() {
   // Simulação - você precisará criar este endpoint no seu backend
-  cardConsultas.textContent = '5';
-  cardReceitas.textContent = '12';
-  cardGanhos.textContent = 'R$ 3.250,00';
+  cardConsultas.textContent = 'N/A';
+  cardReceitas.textContent = 'N/A';
+  cardGanhos.textContent = 'N/A';
 
 }
 
 // --- CARREGA A AGENDA DO DIA ---
 async function carregarAgenda() {
   tabelaAgenda.innerHTML = `<tr><td colspan="4">Carregando agenda...</td></tr>`;
-  const medicoId = 1; // Para testes
+  const medicoId = 1;
 
   try {
     const response = await fetch(`http://localhost:8080/api/consultas/medico/${medicoId}/hoje`);
@@ -97,17 +103,52 @@ async function carregarReceitas() {
   listaReceitas.innerHTML = '<li>Carregando...</li>';
   try {
       const response = await fetch('http://localhost:8080/api/receitas');
+      if (!response.ok) throw new Error('Falha ao buscar receitas.');
+
       const dados = await response.json();
       listaReceitas.innerHTML = '';
+
+      if (dados.length === 0) {
+              listaReceitas.innerHTML = '<li>Nenhuma receita emitida.</li>';
+              return;
+      }
+
       dados.forEach(receita => {
           const item = document.createElement("li");
-          item.textContent = `${receita.paciente.nome} - ${receita.itens[0].nomeMedicamento}`; // Exemplo
+
+          item.textContent = `${receita.paciente.nome} - ${receita.nomeMedicamento}`;
           listaReceitas.appendChild(item);
       });
   } catch (error) {
       console.error("Erro ao carregar receitas:", error);
       listaReceitas.innerHTML = '<li>Erro ao carregar receitas.</li>';
   }
+}
+
+async function buscarPacientePorCpf(cpf) {
+    if (cpf.length !== 11) return;
+
+    inputPacienteNome.value = 'Buscando...';
+    inputPacienteId.value = '';
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/pacientes/cpf/${cpf}`);
+
+        if (response.ok) {
+            const paciente = await response.json();
+            inputPacienteNome.value = paciente.nome;
+            inputPacienteId.value = paciente.id;
+            return paciente;
+        } else {
+            inputPacienteNome.value = 'Paciente não encontrado';
+            alert('CPF não encontrado no sistema.');
+            return null;
+        }
+    } catch (error) {
+        console.error("Erro ao buscar paciente:", error);
+        inputPacienteNome.value = 'Erro de comunicação';
+        return null;
+    }
 }
 
 // ==========================================================
@@ -139,6 +180,44 @@ function mostrarTela(id) {
 // --- ENVIO DO FORMULÁRIO DE NOVA RECEITA ---
 formReceita?.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  if (!inputPacienteId.value) {
+        alert("Por favor, preencha um CPF válido e aguarde o nome ser preenchido.");
+        return;
+    }
+
+try {
+    const pacienteId = inputPacienteId.value;
+        const medicamento = inputMedicamento.value;
+        const observacoes = inputObservacoes.value;
+
+        const dados = {
+          pacienteId: pacienteId,
+          nomeMedicamento: medicamento,
+          descricaoUsoMedicamento: observacoes
+        };
+
+    // 4. Enviar os dados para o backend
+    const response = await fetch('http://localhost:8080/api/receitas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dados)
+    });
+
+    if (!response.ok) {
+      throw new Error('Falha ao salvar. O servidor respondeu com um erro.');
+    }
+
+    // 5. Se deu tudo certo:
+    carregarReceitas();
+    formReceita.reset();
+    alert("Receita gerada e salva com sucesso!");
+
+  } catch (error) {
+    // 6. Se deu algum erro na comunicação:
+    console.error("Erro ao gerar receita:", error);
+    alert("Não foi possível salvar a receita. Verifique o console para mais detalhes.");
+  }
 });
 
 // --- ATUALIZAÇÃO DE STATUS DA CONSULTA ---
@@ -154,6 +233,13 @@ tabelaAgenda.addEventListener('change', (event) => {
 botaoSair?.addEventListener('click', () => {
   alert('Você foi desconectado.');
   window.location.href = 'login.html';
+});
+
+inputCpf?.addEventListener('blur', (e) => {
+    const cpf = e.target.value.replace(/[^0-9]/g, '');
+    if (cpf.length === 11) { // Só busca se tiver 11 dígitos
+        buscarPacientePorCpf(cpf);
+    }
 });
 
 // ==========================================================

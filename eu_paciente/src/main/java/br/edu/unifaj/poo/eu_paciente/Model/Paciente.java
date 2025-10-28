@@ -15,16 +15,14 @@ public class Paciente {
 
     private Long id;
 
-    @NotBlank(message = "O preenchimento do Nome é obrigatório!")
     private String nome;
 
-    @NotBlank(message = "O preenchimento da Idade é obrigatório!")
     private String idade;
 
-    @NotBlank(message = "O preenchimento do Email é obrigatório!")
+    private String cpf;
+
     private String email;
 
-    @NotBlank(message = "O preenchimento da Senha é obrigatório!")
     private String senha;
 
     private List<Receita> receitas;
@@ -33,10 +31,11 @@ public class Paciente {
     public Paciente(){
     }
 
-    public Paciente(Long id, String nome, String idade, String email, String senha) {
+    public Paciente(Long id, String nome, String idade, String cpf, String email, String senha) {
         this.id = id;
         this.nome = nome;
         this.idade = idade;
+        this.cpf = cpf;
         this.email = email;
         this.senha = senha;
     }

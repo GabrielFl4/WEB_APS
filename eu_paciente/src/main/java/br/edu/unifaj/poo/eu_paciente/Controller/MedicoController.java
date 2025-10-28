@@ -1,6 +1,6 @@
 package br.edu.unifaj.poo.eu_paciente.Controller;
 
-import br.edu.unifaj.poo.eu_paciente.DTO.LoginDTO;
+import br.edu.unifaj.poo.eu_paciente.DTO.LoginRequest;
 import br.edu.unifaj.poo.eu_paciente.Service.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ public class MedicoController {
     private MedicoService medicoService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> acessarLogin(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<String> acessarLogin(@RequestBody LoginRequest loginRequest){
 
-        boolean loginValido = medicoService.verificaLogin(loginDTO);
+        boolean loginValido = medicoService.verificaLogin(loginRequest);
 
         if (loginValido){
             return ResponseEntity.ok("Login bem-sucedido!");

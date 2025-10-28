@@ -82,19 +82,27 @@
 
     <!-- RECEITAS -->
     <section id="receitas" class="conteudo">
+
       <h2>Gerar Receita Médica</h2>
       <form id="form-receita">
+
+        <label>CPF do Paciente:</label>
+        <input type="text" id="input-cpf" placeholder="Ex: 12345678900" required>
+
+        <input type="hidden" id="input-paciente-id">
+
         <label>Paciente:</label>
-        <input type="text" placeholder="Nome do paciente" required>
+        <input type="text" id="input-paciente-nome" placeholder="Nome do paciente" required readonly>
 
         <label>Medicamento:</label>
-        <input type="text" placeholder="Nome do medicamento" required>
+        <input type="text" id="input-medicamento" placeholder="Nome do medicamento" required>
 
         <label>Dosagem / Observações:</label>
-        <textarea placeholder="Ex: Tomar 1 comprimido ao dia por 7 dias"></textarea>
+        <textarea id="input-observacoes" placeholder="Ex: Tomar 1 comprimido ao dia por 7 dias"></textarea>
 
         <button type="submit">Gerar Receita</button>
       </form>
+
       <div id="lista-receitas">
         <h3>Receitas Emitidas</h3>
         <ul></ul>
