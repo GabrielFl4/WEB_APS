@@ -14,7 +14,7 @@ public class PacienteService {
 
     // TODO -> Aqui vai ser substituido pela consulta do BD
     public PacienteService() {
-        // Tudo hardcoded por culpa do Igão ai valeu
+        // Tudo hardcoded por culpa do Igão aí valeu
         Paciente p1 = new Paciente(1L, "Gabriel Morandim Rodrigues", "20", "gabrielmorandim05@gmail.com", "NesseJogoTemSexo");
         Paciente p2 = new Paciente(2L, "Igor Cremasco Viotto", "20", "email_do_igao@gmail.com", "123");
         Paciente p3 = new Paciente(3L, "Jaozin@gmail.com", "19", "jon", "123");
