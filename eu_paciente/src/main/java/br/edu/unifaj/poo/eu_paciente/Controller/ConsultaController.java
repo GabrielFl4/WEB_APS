@@ -23,6 +23,12 @@ public class ConsultaController {
         return ResponseEntity.ok(consultas);
     }
 
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<List<Consulta>> getConsultas(@PathVariable Long idUsuario) {
+        List<Consulta> consultas = consultaService.exibirConsultas(idUsuario);
+        return ResponseEntity.ok(consultas);
+    }
+
     @PutMapping("/{consultaId}/status")
     public ResponseEntity<Consulta> updateStatus(
             @PathVariable Long consultaId,

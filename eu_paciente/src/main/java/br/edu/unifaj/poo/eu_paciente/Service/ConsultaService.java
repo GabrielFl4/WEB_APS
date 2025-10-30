@@ -61,6 +61,12 @@ public class ConsultaService {
                 .collect(Collectors.toList());
     }
 
+    public List<Consulta> exibirConsultas(Long idUsuario){
+        return listaDeConsultas.stream()
+                .filter(consulta -> consulta.getPaciente().getId().equals(idUsuario))
+                .collect(Collectors.toList());
+    }
+
     public Consulta atualizarStatusConsulta(Long idConsulta, StatusAndamentoConsulta novoStatus){
         for (Consulta consulta: listaDeConsultas){
             if (consulta.getId().equals(idConsulta)){
