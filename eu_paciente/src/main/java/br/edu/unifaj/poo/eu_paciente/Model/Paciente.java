@@ -45,6 +45,11 @@ public class Paciente {
     public Paciente(){
     }
 
+    public Paciente(String nome, String cpf){
+        this.nome = nome;
+        this.cpf = cpf;
+    }
+
     public Paciente(Long id, String nome, String data_nasc, String cpf, String email, String senha, String telefone, String complemento) {
         this.id = id;
         this.nome = nome;

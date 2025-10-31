@@ -16,7 +16,7 @@ public class MedicoController {
     private MedicoService medicoService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> acessarLogin(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<String> acessarLogin(@RequestBody LoginRequest loginRequest) throws Exception {
 
         boolean loginValido = medicoService.verificaLogin(loginRequest);
 

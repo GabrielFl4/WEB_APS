@@ -1,7 +1,9 @@
 package br.edu.unifaj.poo.eu_paciente.Service;
 
+import br.edu.unifaj.poo.eu_paciente.DAO.MedicoDAO;
 import br.edu.unifaj.poo.eu_paciente.DTO.LoginRequest;
 import br.edu.unifaj.poo.eu_paciente.Model.Medico;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,9 +12,13 @@ import java.util.List;
 @Service
 public class MedicoService {
 
+    @Autowired
+    MedicoDAO dao;
+
     public List<Medico> listaDeMedicos = new ArrayList<>();
 
-    public boolean verificaLogin(LoginRequest loginRequest){
+    public boolean verificaLogin(LoginRequest loginRequest) throws Exception {
+        listaDeMedicos = dao.selectMedicos();
 
         for (Medico medico: listaDeMedicos){
 
