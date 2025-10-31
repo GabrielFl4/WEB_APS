@@ -1,9 +1,12 @@
 package br.edu.unifaj.poo.eu_paciente.Service;
+import br.edu.unifaj.poo.eu_paciente.DAO.ConsultaDAO;
 import br.edu.unifaj.poo.eu_paciente.Enum.StatusAndamentoConsulta;
 import br.edu.unifaj.poo.eu_paciente.Enum.StatusMotivoConsulta;
 import br.edu.unifaj.poo.eu_paciente.Model.Consulta;
 import br.edu.unifaj.poo.eu_paciente.Model.Medico;
 import br.edu.unifaj.poo.eu_paciente.Model.Paciente;
+import io.micrometer.common.util.internal.logging.InternalLogLevel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,41 +20,11 @@ import java.util.stream.Collectors;
 @Service
 public class ConsultaService {
 
+    @Autowired
+    ConsultaDAO dao;
+
     public List<Consulta> listaDeConsultas = new ArrayList<>();
     public AtomicLong contadorId = new AtomicLong();
-
-    public ConsultaService(){
-
-        //Todo, HARDCODE GERADO POR IA, MOTIVO: OTIMIZAÇÃO DE TEMPO (PREGUIÇA)
-
-        Medico medicoTeste = new Medico(1L, "Dr. João Silva", "joao.silva@email.com", "1234", "Cardiologista");
-        Paciente paciente1 = new Paciente(1L, "Ana Souza", "32","62927499277", "ana.souza@email.com", "senha1");
-        Paciente paciente2 = new Paciente(2L, "Bruno Lima", "40","88729477222", "bruno.lima@email.com", "senha2");
-
-        listaDeConsultas.add(new Consulta(
-                false,
-                new BigDecimal("250.00"),
-                "Paciente relata dores no peito.",
-                LocalDateTime.now().withHour(9).withMinute(0),
-                contadorId.incrementAndGet(),
-                StatusAndamentoConsulta.CONFIRMADA,
-                StatusMotivoConsulta.RETORNO,
-                paciente1,
-                medicoTeste
-        ));
-
-        listaDeConsultas.add(new Consulta(
-                true,
-                new BigDecimal("350.00"),
-                "Check-up anual.",
-                LocalDateTime.now().withHour(10).withMinute(30),
-                contadorId.incrementAndGet(),
-                StatusAndamentoConsulta.PENDENTE,
-                StatusMotivoConsulta.CONSULTA_INICIAL,
-                paciente2,
-                medicoTeste
-        ));
-    }
 
     public List<Consulta> buscarConsultaPorDia(Long idMedico){
         LocalDate hoje = LocalDate.now();
@@ -61,22 +34,12 @@ public class ConsultaService {
                 .collect(Collectors.toList());
     }
 
-    public List<Consulta> exibirConsultas(Long idUsuario){
-        return listaDeConsultas.stream()
-                .filter(consulta -> consulta.getPaciente().getId().equals(idUsuario))
-                .collect(Collectors.toList());
+    public List<Consulta> exibirConsultas(Long idUsuario) throws Exception {
+        listaDeConsultas = dao.selectConsultasPorPaciente(idUsuario);
+        return listaDeConsultas;
     }
 
-    public Consulta atualizarStatusConsulta(Long idConsulta, StatusAndamentoConsulta novoStatus){
-        for (Consulta consulta: listaDeConsultas){
-            if (consulta.getId().equals(idConsulta)){
-                consulta.setStatusAndamento(novoStatus);
-                System.out.println("Status da consulta " + idConsulta + " atualizado para " + novoStatus);
-                return consulta;
-            }
-        }
-        return null;
+    public Consulta atualizarStatusConsulta(Long idConsulta, StatusAndamentoConsulta novoStatus) throws Exception {
+        return dao.atualizarStatusConsulta(idConsulta.intValue(), novoStatus.toString());
     }
-
-
 }

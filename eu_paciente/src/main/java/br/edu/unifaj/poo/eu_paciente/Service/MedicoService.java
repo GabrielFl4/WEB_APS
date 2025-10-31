@@ -12,12 +12,6 @@ public class MedicoService {
 
     public List<Medico> listaDeMedicos = new ArrayList<>();
 
-    //todo, Médico implantado manualmente
-    public MedicoService() {
-        Medico medicoTeste = new Medico(1L, "Dr. João Silva", "joao.silva@email.com", "1234", "Cardiologista");
-        this.listaDeMedicos.add(medicoTeste);
-    }
-
     public boolean verificaLogin(LoginRequest loginRequest){
 
         for (Medico medico: listaDeMedicos){

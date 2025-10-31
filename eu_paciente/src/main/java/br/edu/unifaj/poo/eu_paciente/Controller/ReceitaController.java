@@ -20,7 +20,7 @@ public class ReceitaController {
     private ReceitaService receitaService;
 
     @PostMapping
-    public ResponseEntity<Receita> criarReceita(@RequestBody ReceitaDTO receitaDTO){
+    public ResponseEntity<Receita> criarReceita(@RequestBody ReceitaDTO receitaDTO) throws Exception{
         try {
             Receita receitaSalva = receitaService.criar(receitaDTO);
             return ResponseEntity.ok(receitaSalva);

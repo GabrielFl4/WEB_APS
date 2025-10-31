@@ -2,7 +2,7 @@ package br.edu.unifaj.poo.eu_paciente.Controller;
 
 import br.edu.unifaj.poo.eu_paciente.DTO.PacienteRequest;
 import br.edu.unifaj.poo.eu_paciente.DTO.PacienteResponse;
-import br.edu.unifaj.poo.eu_paciente.DAO.PacienteDao;
+import br.edu.unifaj.poo.eu_paciente.DAO.PacienteDAO;
 import br.edu.unifaj.poo.eu_paciente.Model.Paciente;
 import br.edu.unifaj.poo.eu_paciente.Service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +17,14 @@ import java.util.Optional;
 public class PacienteController {
 
     @Autowired
-    PacienteDao dao;
+    PacienteService service;
 
     @Autowired
     private PacienteService pacienteService;
 
     @PostMapping("/login")
-    public PacienteResponse fazerLogin(@RequestBody PacienteRequest request){
-        Optional<Paciente> p = dao.loginPaciente(request.getEmail(), request.getSenha());
+    public PacienteResponse fazerLogin(@RequestBody PacienteRequest request) throws Exception {
+        Optional<Paciente> p = service.loginPaciente(request.getEmail(), request.getSenha());
         PacienteResponse resp = new PacienteResponse();
         if (p.isEmpty()){
             resp.setStatus("401");
@@ -37,7 +37,7 @@ public class PacienteController {
     }
 
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<Paciente> buscarPorCpf(@PathVariable String cpf){
+    public ResponseEntity<Paciente> buscarPorCpf(@PathVariable String cpf) throws Exception {
         Paciente paciente = pacienteService.BuscarCpf(cpf);
 
         if (paciente != null){

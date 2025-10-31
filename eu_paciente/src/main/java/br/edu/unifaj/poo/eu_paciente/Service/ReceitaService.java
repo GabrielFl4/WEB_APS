@@ -21,7 +21,7 @@ public class ReceitaService {
     @Autowired
     private PacienteService pacienteService;
 
-    public Receita criar(ReceitaDTO receitaDTO){
+    public Receita criar(ReceitaDTO receitaDTO) throws Exception {
 
         // Primeiro passo é verificar se o Paciente existe
         Paciente pacienteEncontrado = pacienteService.buscarPorId(receitaDTO.getPacienteId());
