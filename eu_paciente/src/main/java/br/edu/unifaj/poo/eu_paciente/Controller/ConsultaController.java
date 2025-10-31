@@ -24,15 +24,13 @@ public class ConsultaController {
     }
 
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<List<Consulta>> getConsultas(@PathVariable Long idUsuario) {
+    public ResponseEntity<List<Consulta>> getConsultas(@PathVariable Long idUsuario) throws Exception {
         List<Consulta> consultas = consultaService.exibirConsultas(idUsuario);
         return ResponseEntity.ok(consultas);
     }
 
     @PutMapping("/{consultaId}/status")
-    public ResponseEntity<Consulta> updateStatus(
-            @PathVariable Long consultaId,
-            @RequestBody AtualizarStatusDTO dto) {
+    public ResponseEntity<Consulta> updateStatus(@PathVariable Long consultaId, @RequestBody AtualizarStatusDTO dto) throws Exception {
 
         Consulta consultaAtualizada = consultaService.atualizarStatusConsulta(consultaId, dto.status());
 

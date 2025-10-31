@@ -1,7 +1,9 @@
 package br.edu.unifaj.poo.eu_paciente.Service;
 
+import br.edu.unifaj.poo.eu_paciente.DAO.PacienteDAO;
 import br.edu.unifaj.poo.eu_paciente.DTO.PacienteRequest;
 import br.edu.unifaj.poo.eu_paciente.Model.Paciente;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,25 +13,14 @@ import java.util.Optional;
 @Service
 public class PacienteService {
 
+    @Autowired
+    PacienteDAO dao;
+
     public List<Paciente> listaDePacientes = new ArrayList<>();
 
+    public Optional<Paciente> loginPaciente(String email, String senha) throws Exception{
+        listaDePacientes = dao.selectPacientes();
 
-    // TODO -> Aqui vai ser substituido pela consulta do BD
-    public PacienteService() {
-        // Tudo hardcoded por culpa do Igão, valeu aí
-        Paciente p1 = new Paciente(1L, "Gabriel Morandim Rodrigues", "20", "39328392833", "gabrielmorandim05@gmail.com", "NesseJogoTemSexo");
-        Paciente p2 = new Paciente(2L, "Igor Cremasco Viotto", "20","48478291822", "email_do_igao@gmail.com", "123");
-        Paciente p3 = new Paciente(3L, "jon", "19","31552744861", "Jaozin@gmail.com", "123");
-        Paciente pdev = new Paciente(4L, "DEV", "0","99999999999", "1@gmail.com", "1");
-
-        listaDePacientes.add(p1);
-        listaDePacientes.add(p2);
-        listaDePacientes.add(p3);
-        listaDePacientes.add(pdev);
-    }
-
-
-    public Optional<Paciente> loginPaciente(String email, String senha){
         if (email == null){
             email = "";
             System.out.println("ANDROID - Email vazio.");
@@ -56,7 +47,9 @@ public class PacienteService {
         return Optional.empty();
     }
 
-    public Paciente BuscarCpf(String cpf){
+    // Função do Igor
+    public Paciente BuscarCpf(String cpf) throws Exception {
+        listaDePacientes = dao.selectPacientes();
         Optional<Paciente> paciente = listaDePacientes.stream()
                 .filter(p -> p.getCpf().equals(cpf))
                 .findFirst();
@@ -64,11 +57,11 @@ public class PacienteService {
         return paciente.orElse(null);
     }
 
-    public Paciente buscarPorId(Long id) {
+    public Paciente buscarPorId(Long id) throws Exception {
+        listaDePacientes = dao.selectPacientes();
         return listaDePacientes.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
-
 }
