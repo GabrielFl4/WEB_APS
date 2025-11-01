@@ -26,12 +26,21 @@ public class ConsultaService {
     public List<Consulta> listaDeConsultas = new ArrayList<>();
     public AtomicLong contadorId = new AtomicLong();
 
-    public List<Consulta> buscarConsultaPorDia(Long idMedico){
+    public List<Consulta> buscarConsultaPorDia(Long idMedico) throws Exception {
         LocalDate hoje = LocalDate.now();
-        return listaDeConsultas.stream()
-                .filter(consulta -> consulta.getMedico().getId().equals(idMedico))
+        listaDeConsultas = dao.selectConsultasPorDia(idMedico);
+        listaDeConsultas = listaDeConsultas.stream()
                 .filter(consulta -> consulta.getDataHora().toLocalDate().isEqual(hoje))
                 .collect(Collectors.toList());
+
+        System.out.println("-- SERVICE: Filtradas consultas para médico de id: | "+ idMedico + " | --");
+        for (Consulta c : listaDeConsultas){
+            System.out.println("> Consulta de id: " + c.getId() + " E horário: " + c.getDataHora());
+        }
+        return listaDeConsultas;
+        /*return listaDeConsultas.stream()
+                .filter(consulta -> consulta.getDataHora().toLocalDate().isEqual(hoje))
+                .collect(Collectors.toList());*/
     }
 
     public List<Consulta> exibirConsultas(Long idUsuario) throws Exception {

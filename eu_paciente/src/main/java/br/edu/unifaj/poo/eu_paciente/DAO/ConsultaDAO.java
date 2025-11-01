@@ -22,7 +22,7 @@ public class ConsultaDAO {
     private JdbcTemplate jdbcTemplate;
 
     public List<Consulta> selectConsultasPorPaciente(Long idPaciente) throws Exception {
-        String querySql = "SELECT consulta.id, consulta.data, consulta.status, consulta.sintomas, medico.nome, medico.especialidade " +
+        String querySQL = "SELECT consulta.id, consulta.data, consulta.status, consulta.sintomas, medico.nome, medico.especialidade " +
                 "FROM paciente " +
                 "LEFT JOIN consulta ON consulta.id_paciente = paciente.id " +
                 "LEFT JOIN medico ON medico.id = consulta.id_medico " +
@@ -30,18 +30,44 @@ public class ConsultaDAO {
 
         try (Connection con = jdbcTemplate.getDataSource().getConnection();
              //Comandos JDBC
-             PreparedStatement ps = con.prepareStatement(querySql)) {
+             PreparedStatement ps = con.prepareStatement(querySQL)) {
             ps.setLong(1, idPaciente);
             List<Consulta> consultas = new ArrayList<>();
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Consulta c = getConsulta(rs);
+                    Consulta c = getConsultaPaciente(rs);
                     consultas.add((c));
                 }
             }
             return consultas;
         }
     }
+
+    public List<Consulta> selectConsultasPorDia(Long idMedico) throws Exception{
+        String querySQL = "SELECT consulta.id, consulta.data, consulta.pago, consulta.status, consulta.rotina, paciente.nome, paciente.cpf " +
+                "FROM paciente " +
+                "LEFT JOIN consulta ON consulta.id_paciente = paciente.id " +
+                "LEFT JOIN medico ON medico.id = consulta.id_medico " +
+                "WHERE medico.id = ?;";
+
+        try (Connection con = jdbcTemplate.getDataSource().getConnection();
+             PreparedStatement ps = con.prepareStatement(querySQL)) {
+                 ps.setLong(1, idMedico);
+                 List<Consulta> consultasDia = new ArrayList<>();
+                 try(ResultSet rs = ps.executeQuery()) {
+                     while(rs.next()){
+                         Consulta c = getConsultaDoDia(rs);
+                         consultasDia.add(c);
+                     }
+                 }
+                    System.out.println("-- DAO RECEBEU objetos 'Consulta' do BD --");
+                 for (Consulta c : consultasDia){
+                     System.out.println("> Consulta de id: " + c.getId() + " E horário: " + c.getDataHora());
+                 }
+                 return consultasDia;
+        }
+    }
+
 
     public Consulta atualizarStatusConsulta(int id_Consulta, String status) throws Exception {
         String updateSQL = "UPDATE consulta " +
@@ -62,7 +88,7 @@ public class ConsultaDAO {
                     ps1.setInt(1, id_Consulta);
                     try (ResultSet rs = ps1.executeQuery()) {
                         rs.next();
-                        return getConsulta(rs);
+                        return getConsultaPaciente(rs);
                     }
                 }
             }
@@ -70,13 +96,24 @@ public class ConsultaDAO {
         }
     }
 
-    private static Consulta getConsulta(ResultSet rs) throws Exception {
+    private static Consulta getConsultaPaciente(ResultSet rs) throws Exception {
         Consulta c = new Consulta();
         c.setId((long) rs.getInt("id"));
         c.setDataHora(rs.getTimestamp("data").toLocalDateTime());
         c.setStatusAndamento(StatusAndamentoConsulta.valueOf(rs.getString("status")));
         c.setSintomas(rs.getString("sintomas"));
         c.setMedico(new Medico(rs.getString("nome"), rs.getString("especialidade")));
+        return c;
+    }
+
+    private static Consulta getConsultaDoDia(ResultSet rs) throws Exception{
+        Consulta c = new Consulta();
+        c.setId((long) rs.getInt("id"));
+        c.setDataHora(rs.getTimestamp("data").toLocalDateTime());
+        c.setConsultaPaga(rs.getBoolean("pago"));
+        c.setStatusAndamento(StatusAndamentoConsulta.valueOf(rs.getString("status")));
+        c.setStatusMotivo(StatusMotivoConsulta.valueOf(rs.getString("rotina")));
+        c.setPaciente(new Paciente(rs.getString("nome"), rs.getString("cpf")));
         return c;
     }
 }

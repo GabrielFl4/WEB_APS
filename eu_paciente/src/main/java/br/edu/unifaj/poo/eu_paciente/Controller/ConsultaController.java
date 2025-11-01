@@ -18,7 +18,7 @@ public class ConsultaController {
     private ConsultaService consultaService;
 
     @GetMapping("/medico/{medicoId}/hoje")
-    public ResponseEntity<List<Consulta>> getConsultasDeHoje(@PathVariable Long medicoId) {
+    public ResponseEntity<List<Consulta>> getConsultasDeHoje(@PathVariable Long medicoId) throws Exception {
         List<Consulta> consultas = consultaService.buscarConsultaPorDia(medicoId);
         return ResponseEntity.ok(consultas);
     }
