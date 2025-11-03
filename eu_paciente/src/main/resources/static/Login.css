@@ -1,70 +1,95 @@
+/* Reset de margens e padrão de fonte para o site */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Segoe UI", sans-serif; /* ALTERAR fonte aqui se quiser */
 }
 
+/* Centraliza tudo na tela e define cor do fundo */
 body {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f5f8fc;
+  background: #ffffff; /* >>> ALTERAR COR DE FUNDO */
 }
 
+/* Caixa principal */
 .login-container {
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: #fff; /* >>> ALTERAR FUNDO DO CARD */
+  padding: 40px; /* >>> ALTERAR ESPAÇAMENTO INTERNO */
+  border-radius: 12px; /* >>> Borda arredondada */
   width: 100%;
-  max-width: 400px;
+  max-width: 380px; /* >>> LARGURA DO CARD */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1); /* >>> SOMBRA DO CARD */
   text-align: center;
 }
 
+/* Logo do sistema */
+.logo {
+  width: 300px; /* >>> TAMANHO DA LOGO */
+  margin-bottom: 10px;
+}
+
+/* Texto do título */
 h2 {
-  color: #007bff;
-  margin-bottom: 25px;
+  color: #005792; /* >>> COR DO TÍTULO */
+  font-size: 22px; /* >>> TAMANHO DO TEXTO DO TÍTULO */
+  margin-bottom: 30px;
 }
 
+/* Labels dos campos */
 label {
-  display: block;
   text-align: left;
-  margin-bottom: 5px;
-  color: #555;
-  font-weight: bold;
+  display: block;
+  color: #333; /* >>> COR DO TEXTO LABEL */
+  font-weight: 600; /* >>> FONTE MAIS GROSSA */
+  margin-bottom: 6px;
 }
 
+/* Campos de input (email e senha) */
 input {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 12px; /* >>> ALTURA DO CAMPO */
+  margin-bottom: 18px; /* >>> ESPAÇO ENTRE CAMPOS */
+  border: 1px solid #ccd5e0; /* >>> COR DA BORDA */
+  border-radius: 6px; /* >>> ARREDONDAMENTO DO CAMPO */
   font-size: 16px;
+  background: #f8fbff; /* >>> COR DO FUNDO DO INPUT */
 }
 
+/* Efeito quando clicar no input */
+input:focus {
+  outline: none;
+  border-color: #007bff; /* >>> COR DA BORDA AO CLICAR */
+  background: white;
+  box-shadow: 0 0 6px rgba(0,123,255,0.2); /* >>> BRILHO AO REDOR */
+}
+
+/* Botão */
 button {
   width: 100%;
-  padding: 12px;
-  background: #007bff;
+  padding: 12px; /* >>> ALTURA DO BOTÃO */
+  background: #005792; /* >>> COR DO BOTÃO */
   color: white;
   border: none;
   border-radius: 6px;
-  cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s;
+  font-weight: bold; /* >>> TEXTO DO BOTÃO EM NEGRITO */
+  cursor: pointer;
+  transition: 0.25s; /* >>> SUAVIZA HOVER */
 }
 
+/* Hover do botão */
 button:hover {
-  background: #005fc1;
+  background: #004a7a; /* >>> COR DO BOTÃO AO PASSAR O MOUSE */
 }
 
+/* Mensagem de erro abaixo do botão */
 .error-message {
   margin-top: 15px;
-  color: #ff4757;
-  font-weight: bold;
-  height: 20px;
+  font-size: 14px;
+  color: #ff3b3b; /* >>> COR DA MENSAGEM DE ERRO */
+  height: 18px; /* >>> GARANTE QUE NÃO MEXA A TELA AO APARECER */
 }

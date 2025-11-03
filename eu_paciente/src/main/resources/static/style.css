@@ -31,16 +31,16 @@ body {
 .sidebar h2 {
   font-size: 22px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   display: flex;
   align-items: center;
-  gap: 8px; /* Espaço entre logo e texto */
+  gap: 0px; /* Espaço entre logo e texto */
 }
 
 /* Logo */
 .logo {
-  width: 32px;
-  height: 32px;
+  width: 70px;
+  height: 50px;
 }
 
 /* Lista de navegação */
