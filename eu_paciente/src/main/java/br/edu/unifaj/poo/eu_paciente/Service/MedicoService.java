@@ -38,4 +38,8 @@ public class MedicoService {
         return false;
     }
 
+    public List<Medico> buscarMedicos() throws Exception{
+        return listaDeMedicos = dao.selectEspecialidades();
+    }
+
 }

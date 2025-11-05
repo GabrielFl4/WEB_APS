@@ -24,6 +24,7 @@ public class Consulta {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataHora;
 
+    @Column("sintomas")
     private String sintomas;
 
     @Column("status")
@@ -46,8 +47,15 @@ public class Consulta {
     private Paciente paciente;
     private Medico medico;
 
-
     public Consulta(){
+    }
+
+    public Consulta(LocalDateTime dataHora, StatusMotivoConsulta statusMotivo, String sintomas, int id_paciente, int id_medico){
+        this.dataHora = dataHora;
+        this.statusMotivo = statusMotivo;
+        this.sintomas = sintomas;
+        this.id_paciente = id_paciente;
+        this.id_medico = id_medico;
     }
 
     public Consulta(boolean consultaPaga, BigDecimal valor, String sintomas, LocalDateTime dataHora, Long id, StatusAndamentoConsulta statusAndamento, StatusMotivoConsulta statusMotivo, Paciente paciente, Medico medico) {

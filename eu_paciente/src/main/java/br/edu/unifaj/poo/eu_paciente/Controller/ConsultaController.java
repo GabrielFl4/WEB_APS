@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -39,5 +40,31 @@ public class ConsultaController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Consulta> adicionarConsulta(@RequestBody Consulta c) throws Exception {
+        try {
+            Consulta consulta = consultaService.addConsulta(c);
+            return ResponseEntity.ok(consulta);
+        } catch (Exception ex) {
+            if (chaveDuplicada(ex)){
+                return ResponseEntity.status(409).body(null); // Se erro de duplicado
+            }
+            return ResponseEntity.status(500).body(null); // Se qualquer outra bomba de erro
+        }
+    }
+
+
+    private boolean chaveDuplicada(Throwable throwable) {
+        while (throwable != null) {
+            if (throwable instanceof SQLException se) {
+                String state = se.getSQLState();
+                int code = se.getErrorCode();
+                if ("23505".equals(state)) return true;  // Erro quando duplicado
+            }
+            throwable = throwable.getCause();
+        }
+        return false;
     }
 }

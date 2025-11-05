@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,25 @@ public class ConsultaDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    public Consulta adicionarConsulta(Consulta consulta) throws Exception{
+        String insertSQL = "INSERT INTO consulta (data, valor, pago, rotina, sintomas, status, id_paciente, id_medico) VALUES " +
+                "(?, ?, ?, ?, ?, 'PENDENTE', ?, ?);";
+
+        try (Connection con = jdbcTemplate.getDataSource().getConnection();
+             PreparedStatement ps = con.prepareStatement(insertSQL)) {
+            ps.setTimestamp(1, Timestamp.valueOf(consulta.getDataHora()));
+            ps.setBigDecimal(2, consulta.getValor());
+            ps.setBoolean(3, consulta.isConsultaPaga());
+            ps.setString(4, consulta.getStatusMotivo().toString());
+            ps.setString(5, consulta.getSintomas());
+            ps.setInt(6, consulta.getId_paciente());
+            ps.setInt(7, consulta.getId_medico());
+            ps.executeUpdate();
+        }
+        return consulta;
+    }
+
 
     public List<Consulta> selectConsultasPorPaciente(Long idPaciente) throws Exception {
         String querySQL = "SELECT consulta.id, consulta.data, consulta.status, consulta.sintomas, medico.nome, medico.especialidade " +
@@ -59,10 +79,6 @@ public class ConsultaDAO {
                          Consulta c = getConsultaDoDia(rs);
                          consultasDia.add(c);
                      }
-                 }
-                    System.out.println("-- DAO RECEBEU objetos 'Consulta' do BD --");
-                 for (Consulta c : consultasDia){
-                     System.out.println("> Consulta de id: " + c.getId() + " E horário: " + c.getDataHora());
                  }
                  return consultasDia;
         }
