@@ -37,6 +37,26 @@ public class MedicoDAO {
         }
     }
 
+    public ArrayList<Medico> selectEspecialidades() throws Exception{
+        String querySQL = "SELECT id, nome, especialidade " +
+                "FROM medico;";
+
+        try (Connection con = jdbcTemplate.getDataSource().getConnection()) {
+            PreparedStatement ps = con.prepareStatement(querySQL);
+            {
+                ArrayList<Medico> medicos = new ArrayList<>();
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Medico med = getMedicoMenor(rs);
+                        medicos.add(med);
+                    }
+                }
+                return medicos;
+            }
+        }
+    }
+
     private static Medico getMedico(ResultSet rs) throws Exception{
             Medico m = new Medico();
             m.setId(rs.getLong("id"));
@@ -45,5 +65,13 @@ public class MedicoDAO {
             m.setSenha(rs.getString("senha"));
             m.setEspecialidade(rs.getString("especialidade"));
             return m;
+    }
+
+    private static Medico getMedicoMenor(ResultSet rs) throws Exception{
+        Medico m = new Medico();
+        m.setId(rs.getLong("id"));
+        m.setNome(rs.getString("nome"));
+        m.setEspecialidade(rs.getString("especialidade"));
+        return m;
     }
 }
