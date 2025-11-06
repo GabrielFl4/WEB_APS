@@ -1,6 +1,7 @@
 package br.edu.unifaj.poo.eu_paciente.Controller;
 
 import br.edu.unifaj.poo.eu_paciente.DTO.ReceitaDTO;
+import br.edu.unifaj.poo.eu_paciente.Model.Medico;
 import br.edu.unifaj.poo.eu_paciente.Model.Receita;
 import br.edu.unifaj.poo.eu_paciente.Service.ReceitaService;
 import jakarta.validation.Valid;
@@ -17,9 +18,21 @@ import java.util.List;
 public class ReceitaController {
 
     @Autowired
-    private ReceitaService receitaService;
+    ReceitaService receitaService;
 
-    @PostMapping
+    @GetMapping("/{id_paciente}")
+    public ResponseEntity<List<Receita>> getReceitas(@PathVariable Long id_paciente) throws Exception{
+        List<Receita> receitas = receitaService.exibirReceitas(id_paciente);
+        for (Receita r : receitas){
+            r.setMedicamentos(receitaService.exibirMedicamentos(r.getId()));
+        }
+
+        return ResponseEntity.ok(receitas);
+    }
+
+
+
+    /*@PostMapping
     public ResponseEntity<Receita> criarReceita(@RequestBody ReceitaDTO receitaDTO) throws Exception{
         try {
             Receita receitaSalva = receitaService.criar(receitaDTO);
@@ -28,9 +41,9 @@ public class ReceitaController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-    }
+    }*/
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<Receita>> listarTodasAsReceitas() {
         List<Receita> receitas = receitaService.listarTodas();
         return ResponseEntity.ok(receitas);

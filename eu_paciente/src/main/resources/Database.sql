@@ -38,14 +38,15 @@ CREATE TABLE IF NOT EXISTS receita (
   id INT AUTO_INCREMENT PRIMARY KEY,
   data DATE NOT NULL,
   id_paciente INT NOT NULL,
-  FOREIGN KEY (id_paciente) REFERENCES paciente(id)
+  id_medico INT NOT NULL,
+  FOREIGN KEY (id_paciente) REFERENCES paciente(id),
+  FOREIGN KEY (id_medico) REFERENCES medico(id)
 );
 
 CREATE TABLE IF NOT EXISTS medicamento (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  nome VARCHAR(250) NOT NULL,
-  dosagem FLOAT NOT NULL, -- DOSAGEM É EM MG OU ML, LEMBRAR DESSA BOMBA
-  periodo_uso VARCHAR(100) NOT NULL,
+  nome VARCHAR(50) NOT NULL,
+  dosagem VARCHAR(250) NOT NULL,
   id_receita INT NOT NULL,
   FOREIGN KEY (id_receita) REFERENCES receita(id)
 );
@@ -55,6 +56,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_paciente_email ON paciente(email);
 CREATE UNIQUE INDEX IF NOT EXISTS uq_medico_email   ON medico(email);
 CREATE UNIQUE INDEX IF NOT EXISTS uq_consulta_horario
   ON consulta(data, id_paciente, id_medico);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_medicamento_receita_nome_dose
+  ON medicamento (id_receita, nome, dosagem);
 
 MERGE INTO paciente (nome, email, senha, cpf, data_nasc, telefone, complemento)
 KEY (email) VALUES
@@ -80,3 +83,21 @@ KEY (data, id_paciente, id_medico) VALUES
   (TIMESTAMP '2025-11-03 10:00:00', 187.00, TRUE,  'RETORNO',  'Dor na coluna',          'CONFIRMADA', 1, 5),
   (TIMESTAMP '2025-11-04 09:30:00', 225.00, FALSE, 'EXAMES', 'Dor ao urinar',          'PENDENTE',   1, 2),
   (TIMESTAMP '2025-11-06 13:30:00', 350.00, FALSE, 'RETORNO',  'Memória curta',          'PENDENTE',   1, 4);
+
+MERGE INTO receita (id, data, id_paciente, id_medico) KEY (id) VALUES
+  (1, '2025-10-10', 1, 1),
+  (2, '2025-11-01', 1, 4),
+  (3, '2025-11-03', 3, 5);
+
+
+MERGE INTO medicamento (nome, dosagem, id_receita)
+KEY (id_receita, nome, dosagem) VALUES
+  ('Amoxicilina',        '500 mg - 1 cápsula a cada 8h por 7 dias',         1),
+  ('Ibuprofeno',         '400 mg - 1 comprimido a cada 8h se dor/febre',    1),
+  ('Omeprazol',          '20 mg - 1 cápsula em jejum por 14 dias',          1),
+  ('Paracetamol',        '750 mg - 1 comprimido a cada 6h se febre',        2),
+  ('Dipirona',           '500 mg - 1 comprimido a cada 6h se dor/febre',    2),
+  ('Soro fisiológico',   '5 mL por nebulização - 3x/dia por 5 dias',        2),
+  ('Losartana',          '50 mg - 1 comprimido 1x/dia',                     3),
+  ('Hidroclorotiazida',  '25 mg - 1 comprimido pela manhã',                 3),
+  ('Atorvastatina',      '20 mg - 1 comprimido à noite',                    3);
