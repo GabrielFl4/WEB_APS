@@ -40,6 +40,12 @@ public class ConsultaService {
         return dao.adicionarConsulta(c);
     }
 
+    public int obterConsultaDeHoje(Long idMedico){
+    LocalDate hoje = LocalDate.now();
+
+    return dao.contarConsultasPorDia(idMedico, hoje);
+    }
+
     public List<Consulta> buscarConsultaPorDia(Long idMedico) throws Exception {
         LocalDate hoje = LocalDate.now();
         listaDeConsultas = dao.selectConsultasPorDia(idMedico);
