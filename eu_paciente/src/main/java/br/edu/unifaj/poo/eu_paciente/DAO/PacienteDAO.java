@@ -22,7 +22,7 @@ public class PacienteDAO {
     private JdbcTemplate jdbcTemplate;
 
     public List<Paciente> selectPacientes() throws Exception {
-        String querySql = "select id, nome, email, senha, cpf, data_nasc, telefone, complemento from databasebonitinho.Paciente";
+        String querySql = "select id, nome, email, senha, cpf, data_nasc, telefone, complemento from databaseBonitinho.paciente";
 
         try (Connection con = jdbcTemplate.getDataSource().getConnection()) {
             //Comandos JDBC
