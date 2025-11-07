@@ -50,6 +50,15 @@ public class Paciente {
         this.cpf = cpf;
     }
 
+    public Paciente(Long id, String nome, String data_nasc, String email, String telefone, String complemento) {
+        this.id = id;
+        this.nome = nome;
+        this.data_nasc = data_nasc;
+        this.email = email;
+        this.telefone = telefone;
+        this.complemento = complemento;
+    }
+
     public Paciente(Long id, String nome, String data_nasc, String cpf, String email, String senha, String telefone, String complemento) {
         this.id = id;
         this.nome = nome;

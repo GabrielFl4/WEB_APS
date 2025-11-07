@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -35,6 +36,33 @@ public class PacienteController {
         }
         return resp;
     }
+
+    @GetMapping("/{idPaciente}")
+    public ResponseEntity<Paciente> buscarPaciente(@PathVariable Long idPaciente) throws Exception{
+        Paciente p;
+        p = service.buscarPacienteId(idPaciente);
+        return ResponseEntity.ok(p);
+    }
+
+    @PutMapping("/{idPaciente}")
+    public ResponseEntity<?> atualizarPaciente(@PathVariable Long idPaciente, @RequestBody Map<String, String> body) throws Exception {
+
+        String telefone = body.get("telefone");
+        String complemento = body.get("complemento");
+
+        if (complemento != null && complemento.length() > 250) {
+            return ResponseEntity.badRequest().body("Complemento deve ter no máximo 250 caracteres"); // Uso badRequest para enviar que tá errado o tamanho
+        }
+
+        int funcionou = service.atualizarPaciente(idPaciente, telefone, complemento);
+        if (funcionou == 0) {
+            return ResponseEntity.status(404).body("Paciente não encontrado");
+        }
+
+        Paciente atualizado = service.buscarPacienteId(idPaciente); // Busco novamente o paciente para mandar
+        return ResponseEntity.ok(atualizado);
+    }
+
 
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<Paciente> buscarPorCpf(@PathVariable String cpf) throws Exception {
