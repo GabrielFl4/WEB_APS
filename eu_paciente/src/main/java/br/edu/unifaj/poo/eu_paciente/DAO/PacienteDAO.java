@@ -1,10 +1,6 @@
 package br.edu.unifaj.poo.eu_paciente.DAO;
 
-import br.edu.unifaj.poo.eu_paciente.Enum.StatusAndamentoConsulta;
-import br.edu.unifaj.poo.eu_paciente.Enum.StatusMotivoConsulta;
-import br.edu.unifaj.poo.eu_paciente.Model.Consulta;
 import br.edu.unifaj.poo.eu_paciente.Model.Paciente;
-import br.edu.unifaj.poo.eu_paciente.Service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,7 +18,7 @@ public class PacienteDAO {
     private JdbcTemplate jdbcTemplate;
 
     public List<Paciente> selectPacientes() throws Exception {
-        String querySql = "select id, nome, email, senha, cpf, data_nasc, telefone, complemento from databasebonitinho.Paciente";
+        String querySql = "select id, nome, email, senha, cpf, data_nasc, telefone, complemento from databaseBonitinho.paciente";
 
         try (Connection con = jdbcTemplate.getDataSource().getConnection()) {
             //Comandos JDBC
@@ -40,6 +36,43 @@ public class PacienteDAO {
             }
         }
     }
+
+    public Paciente selectPacienteId(Long idPaciente) throws Exception{
+        String querySql = "select id, nome, email, senha, cpf, data_nasc, telefone, complemento " +
+                "from paciente where id = ?";
+
+        try (Connection con = jdbcTemplate.getDataSource().getConnection()) {
+            PreparedStatement ps = con.prepareStatement(querySql);
+            ps.setLong(1, idPaciente);
+            {
+                Paciente p = new Paciente();
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return getPaciente(rs);
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        }
+    }
+
+    public int  atualizarPaciente(Long idPaciente, String telefone, String complemento) throws Exception {
+        String updateSQL = "UPDATE paciente " +
+                "SET telefone = ?, complemento = ? " +
+                "WHERE id = ?";
+
+        try (Connection con = jdbcTemplate.getDataSource().getConnection();
+             PreparedStatement ps = con.prepareStatement(updateSQL)) {
+            ps.setString(1, telefone);
+            ps.setString(2, complemento);
+            ps.setLong(3, idPaciente);
+            return ps.executeUpdate();
+        }
+    }
+
+
 
     private static Paciente getPaciente(ResultSet rs) throws Exception {
         Paciente paciente = new Paciente();

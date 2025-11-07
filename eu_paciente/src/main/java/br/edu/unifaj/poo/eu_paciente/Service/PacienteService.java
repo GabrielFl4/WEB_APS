@@ -47,6 +47,15 @@ public class PacienteService {
         return Optional.empty();
     }
 
+    public int atualizarPaciente(Long id, String tel, String comp) throws Exception {
+        return dao.atualizarPaciente(id, tel, comp);
+    }
+
+    public Paciente buscarPacienteId(Long idUsuario) throws Exception {
+        Paciente p = dao.selectPacienteId(idUsuario);
+        return p;
+    }
+
     // Função do Igor
     public Paciente BuscarCpf(String cpf) throws Exception {
         listaDePacientes = dao.selectPacientes();
