@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,26 @@ public class ConsultaDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+
+    public int contarConsultasPorDia(Long idMedico, LocalDate data) {
+        String querySQL = "SELECT COUNT(*) FROM consulta WHERE id_medico = ? AND CAST(data AS DATE) = ?";
+
+        try {
+            // queryForObject é ideal para quando você espera um único valor de retorno
+            Integer count = jdbcTemplate.queryForObject(
+                    querySQL,
+                    new Object[]{idMedico, java.sql.Date.valueOf(data)}, // Argumentos da query
+                    Integer.class // O tipo que esperamos de volta
+            );
+
+            return (count != null) ? count : 0;
+
+        } catch (Exception e) {
+            System.err.println("Erro ao contar consultas: " + e.getMessage());
+            return 0;
+        }
+    }
 
     public Consulta adicionarConsulta(Consulta consulta) throws Exception{
         String insertSQL = "INSERT INTO consulta (data, valor, pago, rotina, sintomas, status, id_paciente, id_medico) VALUES " +

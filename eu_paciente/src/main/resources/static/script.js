@@ -29,8 +29,29 @@ const botaoSair = document.querySelector('.logout');
 
 // --- CARREGA OS DADOS DO DASHBOARD ---
 async function carregarDashboard() {
-  // Simulação - você precisará criar este endpoint no seu backend
-  cardConsultas.textContent = 'N/A';
+
+  const idMedicoLogado = 1;
+
+    try {
+      const responseConsultas = await fetch(`/api/dashboard/consultas-hoje/${idMedicoLogado}`);
+
+      if (!responseConsultas.ok) {
+        throw new Error('Falha ao buscar total de consultas');
+      }
+
+      const totalConsultas = await responseConsultas.json();
+
+      cardConsultas.textContent = totalConsultas;
+
+    } catch (error) {
+      console.error('Erro ao carregar card de consultas:', error);
+      cardConsultas.textContent = 'Erro';
+    }
+
+    cardReceitas.textContent = 'N/A';
+    cardGanhos.textContent = 'N/A';
+  }
+
   cardReceitas.textContent = 'N/A';
   cardGanhos.textContent = 'N/A';
 
