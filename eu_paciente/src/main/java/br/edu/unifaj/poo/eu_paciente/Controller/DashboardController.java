@@ -19,7 +19,7 @@ public class DashboardController {
     @Autowired
     private ConsultaService consultaService;
 
-    @GetMapping("{consultas-hoje/idMedico}")
+    @GetMapping("consultas-hoje/{idMedico}")
     public ResponseEntity<Integer> getTotalConsultasHoje(@PathVariable Long idMedico){
 
         int totalConsulta = consultaService.obterConsultaDeHoje(idMedico);
