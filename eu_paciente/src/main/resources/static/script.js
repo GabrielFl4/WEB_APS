@@ -33,7 +33,7 @@ async function carregarDashboard() {
   const idMedicoLogado = 1;
 
     try {
-      const responseConsultas = await fetch(`/api/dashboard/consultas-hoje/${idMedicoLogado}`);
+      const responseConsultas = await fetch(`http://localhost:8080/api/resumo/consultas-hoje/${idMedicoLogado}`);
 
       if (!responseConsultas.ok) {
         throw new Error('Falha ao buscar total de consultas');
@@ -47,10 +47,6 @@ async function carregarDashboard() {
       console.error('Erro ao carregar card de consultas:', error);
       cardConsultas.textContent = 'Erro';
     }
-
-    cardReceitas.textContent = 'N/A';
-    cardGanhos.textContent = 'N/A';
-  }
 
   cardReceitas.textContent = 'N/A';
   cardGanhos.textContent = 'N/A';
@@ -268,4 +264,6 @@ inputCpf?.addEventListener('blur', (e) => {
 // ==========================================================
 document.addEventListener('DOMContentLoaded', () => {
   mostrarTela('dashboard');
+
+  document.addEventListener('DOMContentLoaded', carregarDashboard);
 });
