@@ -42,6 +42,15 @@ public class ConsultaController {
         }
     }
 
+    @PutMapping("/{consultaId}/pago")
+    public ResponseEntity<Consulta> updatePago(@PathVariable Long consultaId, @RequestBody boolean pago) throws Exception{
+        Consulta atualizada = consultaService.atualizarPagoConsulta(consultaId, pago);
+
+        System.out.println("FINANCEIRO |Consulta de ID " + atualizada.getId() + " - Status de pagamento alterado para: " + atualizada.isConsultaPaga());
+
+        return ResponseEntity.ok(atualizada);
+    }
+
     @PostMapping("/")
     public ResponseEntity<Consulta> adicionarConsulta(@RequestBody Consulta c) throws Exception {
         try {
@@ -55,7 +64,7 @@ public class ConsultaController {
         }
     }
 
-
+    // Utilitário que passa o erro do sql
     private boolean chaveDuplicada(Throwable throwable) {
         while (throwable != null) {
             if (throwable instanceof SQLException se) {

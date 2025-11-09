@@ -5,21 +5,16 @@ import br.edu.unifaj.poo.eu_paciente.Enum.StatusAndamentoConsulta;
 import br.edu.unifaj.poo.eu_paciente.Enum.StatusMotivoConsulta;
 import br.edu.unifaj.poo.eu_paciente.Model.Consulta;
 import br.edu.unifaj.poo.eu_paciente.Model.Medico;
-import br.edu.unifaj.poo.eu_paciente.Model.Paciente;
-import io.micrometer.common.util.internal.logging.InternalLogLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
-
-import static br.edu.unifaj.poo.eu_paciente.Enum.StatusMotivoConsulta.CONSULTA_INICIAL;
 
 @Service
 public class ConsultaService {
@@ -61,6 +56,10 @@ public class ConsultaService {
 
     public Consulta atualizarStatusConsulta(Long idConsulta, StatusAndamentoConsulta novoStatus) throws Exception {
         return dao.atualizarStatusConsulta(idConsulta.intValue(), novoStatus.toString());
+    }
+
+    public Consulta atualizarPagoConsulta(Long idConsulta, boolean pago) throws Exception{
+        return dao.atualizarPagaConsulta(idConsulta.intValue(), pago);
     }
 
 

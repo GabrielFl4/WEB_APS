@@ -63,11 +63,12 @@ public class ConsultaDAO {
 
 
     public List<Consulta> selectConsultasPorPaciente(Long idPaciente) throws Exception {
-        String querySQL = "SELECT consulta.id, consulta.data, consulta.status, consulta.sintomas, medico.nome, medico.especialidade " +
+        String querySQL = "SELECT consulta.id, consulta.data, consulta.status, consulta.sintomas, consulta.pago, consulta.valor, medico.nome, medico.especialidade " +
                 "FROM paciente " +
                 "LEFT JOIN consulta ON consulta.id_paciente = paciente.id " +
                 "LEFT JOIN medico ON medico.id = consulta.id_medico " +
-                "WHERE paciente.id = ?;";
+                "WHERE paciente.id = ? " +
+                "ORDER BY data;";
 
         try (Connection con = jdbcTemplate.getDataSource().getConnection();
              //Comandos JDBC
@@ -89,7 +90,8 @@ public class ConsultaDAO {
                 "FROM paciente " +
                 "LEFT JOIN consulta ON consulta.id_paciente = paciente.id " +
                 "LEFT JOIN medico ON medico.id = consulta.id_medico " +
-                "WHERE medico.id = ?;";
+                "WHERE medico.id = ? " +
+                "ORDER BY data;";
 
         try (Connection con = jdbcTemplate.getDataSource().getConnection();
              PreparedStatement ps = con.prepareStatement(querySQL)) {
@@ -105,6 +107,33 @@ public class ConsultaDAO {
         }
     }
 
+    public Consulta atualizarPagaConsulta(int idConsulta, boolean pago) throws Exception{
+        String updateSQL = "UPDATE consulta " +
+                "SET pago = ? " + // TRUE ou FALSE
+                "WHERE id = ?;";
+        try (Connection con = jdbcTemplate.getDataSource().getConnection();
+             PreparedStatement ps = con.prepareStatement(updateSQL)) {
+            ps.setBoolean(1, pago);
+            ps.setInt(2, idConsulta);
+            int res = ps.executeUpdate();
+            if (res == 1) {
+                String querySql = "SELECT consulta.id, consulta.data, consulta.status, consulta.pago, consulta.valor, medico.nome, medico.especialidade " +
+                        "FROM consulta " +
+                        "LEFT JOIN medico ON medico.id = consulta.id_medico " +
+                        "WHERE consulta.id = ?;";
+                PreparedStatement ps1 = con.prepareStatement(querySql);{
+                    ps1.setInt(1, idConsulta);
+                    try (ResultSet rs = ps1.executeQuery()) {
+                        rs.next();
+                        return getConsultaPaga(rs);
+                    }
+                }
+            }
+            throw new Exception("Erro no update");
+        }
+
+    }
+
 
     public Consulta atualizarStatusConsulta(int id_Consulta, String status) throws Exception {
         String updateSQL = "UPDATE consulta " +
@@ -117,7 +146,7 @@ public class ConsultaDAO {
             int res = ps.executeUpdate();
             if (res == 1) {
                 System.out.println("Status da consulta " + id_Consulta + " atualizado para " + status);
-                String querySql = "SELECT consulta.id, consulta.data, consulta.status, consulta.sintomas, medico.nome, medico.especialidade " +
+                String querySql = "SELECT consulta.id, consulta.data, consulta.status, consulta.pago, consulta.valor, medico.nome, medico.especialidade " +
                         "FROM consulta " +
                         "LEFT JOIN medico ON medico.id = consulta.id_medico " +
                         "WHERE consulta.id = ?;";
@@ -139,6 +168,19 @@ public class ConsultaDAO {
         c.setDataHora(rs.getTimestamp("data").toLocalDateTime());
         c.setStatusAndamento(StatusAndamentoConsulta.valueOf(rs.getString("status")));
         c.setSintomas(rs.getString("sintomas"));
+        c.setConsultaPaga(rs.getBoolean("pago"));
+        c.setValor(rs.getBigDecimal("valor"));
+        c.setMedico(new Medico(rs.getString("nome"), rs.getString("especialidade")));
+        return c;
+    }
+
+    private static Consulta getConsultaPaga(ResultSet rs) throws Exception{
+        Consulta c = new Consulta();
+        c.setId((long) rs.getInt("id"));
+        c.setDataHora(rs.getTimestamp("data").toLocalDateTime());
+        c.setStatusAndamento(StatusAndamentoConsulta.valueOf(rs.getString("status")));
+        c.setConsultaPaga(rs.getBoolean("pago"));
+        c.setValor(rs.getBigDecimal("valor"));
         c.setMedico(new Medico(rs.getString("nome"), rs.getString("especialidade")));
         return c;
     }
