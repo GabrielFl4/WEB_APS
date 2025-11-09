@@ -146,7 +146,7 @@ public class ConsultaDAO {
             int res = ps.executeUpdate();
             if (res == 1) {
                 System.out.println("Status da consulta " + id_Consulta + " atualizado para " + status);
-                String querySql = "SELECT consulta.id, consulta.data, consulta.status, consulta.pago, consulta.valor, medico.nome, medico.especialidade " +
+                String querySql = "SELECT consulta.id, consulta.data, consulta.status, consulta.pago, consulta.sintomas, consulta.valor, medico.nome, medico.especialidade " +
                         "FROM consulta " +
                         "LEFT JOIN medico ON medico.id = consulta.id_medico " +
                         "WHERE consulta.id = ?;";
