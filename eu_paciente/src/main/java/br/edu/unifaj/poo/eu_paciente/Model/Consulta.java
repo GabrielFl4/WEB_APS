@@ -33,6 +33,7 @@ public class Consulta {
     @Column("rotina")
     private StatusMotivoConsulta statusMotivo;
 
+    @Column("valor")
     private BigDecimal valor;
 
     @Column("pago")
@@ -55,7 +56,7 @@ public class Consulta {
         this.statusMotivo = statusMotivo;
         this.sintomas = sintomas;
         this.id_paciente = id_paciente;
-        this.id_medico = id_medico;
+           this.id_medico = id_medico;
     }
 
     public Consulta(boolean consultaPaga, BigDecimal valor, String sintomas, LocalDateTime dataHora, Long id, StatusAndamentoConsulta statusAndamento, StatusMotivoConsulta statusMotivo, Paciente paciente, Medico medico) {
