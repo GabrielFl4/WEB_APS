@@ -15,7 +15,6 @@ const cardReceitas = document.getElementById('card-receitas');
 const cardGanhos = document.getElementById('card-ganhos');
 
 const tabelaAgenda = document.getElementById('tabela-agenda');
-// O botão de atualizar e a lógica de eventos serão adicionados depois para simplificar
 
 const formReceita = document.getElementById('form-receita');
 const listaReceitas = document.querySelector("#lista-receitas ul");
@@ -28,9 +27,14 @@ const botaoSair = document.querySelector('.logout');
 // ==========================================================
 
 // --- CARREGA OS DADOS DO DASHBOARD ---
-async function carregarDashboard() {
+async function carregarDashboard(){
 
-  const idMedicoLogado = 1;
+    const idMedicoLogado = sessionStorage.getItem('idMedicoLogado');
+
+    if(!idMedicoLogado){
+    cardConsultas.textContent = 'Erro de id';
+    return;
+    }
 
     try {
       const responseConsultas = await fetch(`http://localhost:8080/api/resumo/consultas-hoje/${idMedicoLogado}`);
@@ -48,8 +52,8 @@ async function carregarDashboard() {
       cardConsultas.textContent = 'Erro';
     }
 
-  cardReceitas.textContent = 'N/A';
-  cardGanhos.textContent = 'N/A';
+    cardReceitas.textContent = 'N/A';
+    cardGanhos.textContent = 'N/A';
 
 }
 
@@ -263,7 +267,22 @@ inputCpf?.addEventListener('blur', (e) => {
 // 4. INICIALIZAÇÃO DA PÁGINA
 // ==========================================================
 document.addEventListener('DOMContentLoaded', () => {
-  mostrarTela('dashboard');
 
-  document.addEventListener('DOMContentLoaded', carregarDashboard);
+  const idMedicoLogado = sessionStorage.getItem('idMedicoLogado');
+  const nomeMedicoLogado = sessionStorage.getItem('nomeMedicoLogado');
+
+  if (!idMedicoLogado) {
+    alert('Você não está logado. Por favor, faça o login.');
+    window.location.href = 'Login.html';
+    return;
+  }
+
+const elementoBoasVindas = document.getElementById('boas-vindas');
+  if (elementoBoasVindas) {
+      elementoBoasVindas.textContent = `Bem-vindo(a), Dr(a). ${nomeMedicoLogado}`;
+  } else {
+      console.warn("Elemento 'boas-vindas' não encontrado no HTML.");
+  }
+
+  mostrarTela('dashboard');
 });

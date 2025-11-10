@@ -17,25 +17,24 @@ public class MedicoService {
 
     public List<Medico> listaDeMedicos = new ArrayList<>();
 
-    public boolean verificaLogin(LoginRequest loginRequest) throws Exception {
-        listaDeMedicos = dao.selectMedicos();
+    public Medico verificaLogin(LoginRequest loginRequest) throws Exception {
+        Medico medico = dao.getMedicoPorEmail(loginRequest.email());
 
-        for (Medico medico: listaDeMedicos){
-
-            boolean emailCorresponde = medico.getEmail().equals(loginRequest.email());
-
-            if (emailCorresponde) {
-                boolean senhaCorresponde = medico.getSenha().equals(loginRequest.senha());
-
-                if (senhaCorresponde) {
-                    System.out.println("Login bem-sucedido para: " + medico.getNome());
-                    return true;
-                }
-            }
+        if (medico == null){
+            System.out.println("Falha no login: Email não encontrado - " + loginRequest.email());
+            return null;
         }
 
-        System.out.println("Falha no login para o email: " + loginRequest.email());
-        return false;
+        boolean senhaCorresponde = medico.getSenha().equals(loginRequest.senha());
+
+        if (senhaCorresponde){
+            System.out.println("Login bem sucedido para - " + loginRequest.email());
+            return medico;
+        }else{
+            System.out.println("Falha no login: Senha incorreta para - " + loginRequest.email());
+            return null;
+        }
+
     }
 
     public List<Medico> buscarMedicos() throws Exception{
