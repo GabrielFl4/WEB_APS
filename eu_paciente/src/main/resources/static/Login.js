@@ -20,7 +20,7 @@ loginForm.addEventListener('submit', async (e) => {
 
   try {
     // Faz a chamada para a API
-    const response = await fetch('http://localhost:8080/api/medicos/login', {
+        const response = await fetch('http://localhost:8080/api/medicos/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -28,18 +28,18 @@ loginForm.addEventListener('submit', async (e) => {
       body: JSON.stringify(loginData)
     });
 
-    // Verifica se a resposta foi bem-sucedida
     if (response.ok) {
-      // SUCESSO! Redireciona o usuário para a página principal
-      alert('Login bem-sucedido!');
-      window.location.href = 'index.html';
+      const medico = await response.json();
+
+            sessionStorage.setItem('idMedicoLogado', medico.id);
+            sessionStorage.setItem('nomeMedicoLogado', medico.nome);
+
+            window.location.href = 'index.html';
     } else {
-      // ERRO! A resposta não foi OK
       const errorText = await response.text();
       errorMessage.textContent = errorText;
     }
   } catch (error) {
-    // ERRO DE CONEXÃO!
     console.error('Erro de conexão:', error);
     errorMessage.textContent = 'Não foi possível conectar ao servidor. Tente novamente.';
   }

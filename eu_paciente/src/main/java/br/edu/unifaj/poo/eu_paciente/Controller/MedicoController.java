@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/medicos")
@@ -19,12 +20,12 @@ public class MedicoController {
     private MedicoService medicoService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> acessarLogin(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<Object> acessarLogin(@RequestBody LoginRequest loginRequest) throws Exception {
 
-        boolean loginValido = medicoService.verificaLogin(loginRequest);
+       Medico medico = medicoService.verificaLogin(loginRequest);
 
-        if (loginValido){
-            return ResponseEntity.ok("Login bem-sucedido!");
+        if (medico != null){
+            return ResponseEntity.ok(medico);
         }else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos.");
         }

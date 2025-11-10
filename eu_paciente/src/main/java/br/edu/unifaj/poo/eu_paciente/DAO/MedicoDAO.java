@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Executable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,24 +18,26 @@ public class MedicoDAO {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<Medico> selectMedicos() throws Exception{
-        String querySQL = "SELECT * " +
-                "FROM medico;";
+    public Medico getMedicoPorEmail(String email) throws Exception{
+        String querySQL = "SELECT * FROM medico WHERE email = ?;";
 
-        try (Connection con = jdbcTemplate.getDataSource().getConnection()) {
-            PreparedStatement ps = con.prepareStatement(querySQL);
-            {
-                List<Medico> medicos = new ArrayList<>();
+        try (Connection con = jdbcTemplate.getDataSource().getConnection();
+            PreparedStatement ps = con.prepareStatement(querySQL)) {
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Medico med = getMedico(rs);
-                        medicos.add(med);
+                ps.setString(1, email);
+
+                try(ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()){
+                        return getMedico(rs);
+                    }else {
+                        return null;
                     }
                 }
-                return medicos;
-            }
+            }catch (Exception e){
+            System.err.println("Erro ao buscar médico por email: " + e.getMessage());
+            return null;
         }
+
     }
 
     public ArrayList<Medico> selectEspecialidades() throws Exception{
