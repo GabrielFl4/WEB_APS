@@ -69,4 +69,8 @@ public class Paciente {
         this.telefone = telefone;
         this.complemento = complemento;
     }
+
+    public Paciente(String nomePaciente) {
+        this.nome = nomePaciente;
+    }
 }

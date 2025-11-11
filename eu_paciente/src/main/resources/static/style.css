@@ -10,7 +10,7 @@
 
 body {
   display: flex; /* Deixa o menu lateral e o conteúdo lado a lado */
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f4f6f9; /* Fundo cinza-claro suave */
   color: #333; /* Texto principal em cinza escuro */
 }
@@ -195,59 +195,112 @@ tr:hover {
 /* ==========================================================
    FORMULÁRIOS (Receita Médica, etc.)
    ========================================================== */
-form {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 500px;
+.form-receita-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite quebrar em telas pequenas */
+    gap: 24px;       /* Espaço entre as colunas */
+    margin-bottom: 30px;
 }
 
-label {
-  font-weight: bold;
-  color: #333;
+.form-coluna-esquerda {
+    flex: 2; /* Ocupa 2/3 do espaço */
+    min-width: 300px;
 }
 
-input, textarea {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  resize: none;
+.form-coluna-direita {
+    flex: 2; /* Ocupa 1/3 do espaço */
+    min-width: 250px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 16px;
 }
 
-button[type="submit"] {
-  background-color: #005792;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
+.form-coluna-direita h3 {
+    margin-top: 0;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
 }
 
-button[type="submit"]:hover {
-  background-color: #0077c8;
+.form-coluna-esquerda label {
+    display: block; /* Força a quebra de linha */
+    margin-bottom: 5px; /* Espaço entre o label e o input */
+    font-weight: bold;
+    color: #555;
 }
 
-/* Lista de receitas */
-#lista-receitas {
-  margin-top: 20px;
+/* Garante que os inputs e textareas ocupem 100% da largura da coluna */
+.form-coluna-esquerda input[type="text"],
+.form-coluna-esquerda textarea {
+    width: 100%;
+    padding: 10px; /* Adiciona espaço interno */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 15px; /* Espaço abaixo de cada input */
 }
 
-#lista-receitas ul {
-  list-style: none;
-  background-color: white;
-  border-radius: 10px;
-  padding: 10px 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+/* Garante que o HR (linha divisória) também ocupe 100% */
+.form-coluna-esquerda hr {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #eee;
 }
 
-#lista-receitas li {
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
+/* Estilo para o novo botão de adicionar */
+.btn-secundario {
+    background-color: #6c757d; /* Um cinza ou azul secundário */
+    color: white;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+.btn-secundario:hover {
+    background-color: #5a6268;
+}
+
+/* Estilo para o botão principal (o de submit) */
+.btn-principal {
+     /* Garante que ele tenha o mesmo estilo do seu botão antigo */
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+
+    /* Mude as cores para bater com seu design */
+    background-color: #0d6efd;
+    color: white;
+}
+.btn-principal:hover {
+    background-color: #0b5ed7;
+}
+
+
+/* Estilo para os itens na lista da direita */
+#lista-medicamentos-atual .medicamento-item-novo {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+#lista-medicamentos-atual .medicamento-item-novo strong {
+    display: block;
+    color: #333;
+    margin-bottom: 5px;
+}
+#lista-medicamentos-atual .medicamento-item-novo p {
+    font-size: 0.9em;
+    color: #666;
+    margin: 0;
 }
 
 /* ==========================================================
@@ -287,4 +340,54 @@ button[type="submit"]:hover {
   .cards {
     flex-direction: column;
   }
+}
+
+.lista-emitidas-container {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+
+    /* REGRAS MOVIDAS PARA CÁ */
+    max-height: 500px; /* Altura máxima */
+    overflow-y: auto;  /* O SCROLL! */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fdfdfd;
+}
+
+.lista-emitidas-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Estilo de cada item na lista de scroll */
+.lista-emitidas-container li {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+}
+.lista-emitidas-container li:last-child {
+    border-bottom: none;
+}
+
+.btn-remover-med {
+    background-color: #d9534f; /* Vermelho (mesmo do "Sair") */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 8px; /* Pequeno */
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    /* Posiciona no canto superior direito do item */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.btn-remover-med:hover {
+    background-color: #b52b27;
 }

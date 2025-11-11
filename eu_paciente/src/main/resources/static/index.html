@@ -82,31 +82,50 @@
 
     <!-- RECEITAS -->
     <section id="receitas" class="conteudo">
+    <h2>Gerar Receita Médica</h2>
 
-      <h2>Gerar Receita Médica</h2>
-      <form id="form-receita">
+    <div class="form-receita-container">
 
-        <label>CPF do Paciente:</label>
+      <form id="form-receita" class="form-coluna-esquerda">
+
+        <label for="input-cpf">CPF do Paciente:</label>
         <input type="text" id="input-cpf" placeholder="Ex: 12345678900" required>
-
         <input type="hidden" id="input-paciente-id">
 
-        <label>Paciente:</label>
-        <input type="text" id="input-paciente-nome" placeholder="Nome do paciente" required readonly>
+        <label for="input-paciente-nome">Paciente:</label>
+        <input type="text" id="input-paciente-nome" placeholder="Nome aparecerá aqui" readonly>
 
-        <label>Medicamento:</label>
-        <input type="text" id="input-medicamento" placeholder="Nome do medicamento" required>
+        <hr> <label for="input-medicamento">Medicamento:</label>
+        <input type="text" id="input-medicamento" placeholder="Nome do medicamento">
 
-        <label>Dosagem / Observações:</label>
-        <textarea id="input-observacoes" placeholder="Ex: Tomar 1 comprimido ao dia por 7 dias"></textarea>
+        <label for="input-observacoes">Dosagem / Observações:</label>
+        <textarea id="input-observacoes" rows="3" placeholder="Ex: Tomar 1 comprimido ao dia por 7 dias"></textarea>
 
-        <button type="submit">Gerar Receita</button>
+        <button type="button" id="btn-add-medicamento" class="btn-secundario">
+          Adicionar Medicamento à Receita
+        </button>
+
+        <button type="submit" id="btn-gerar-receita" class="btn-principal">
+          Gerar Receita
+        </button>
+
       </form>
 
-      <div id="lista-receitas">
-        <h3>Receitas Emitidas</h3>
-        <ul></ul>
+      <div class="form-coluna-direita">
+        <h3>Medicamentos na Receita</h3>
+        <div id="lista-medicamentos-atual">
+          <p>Nenhum medicamento adicionado.</p>
+        </div>
       </div>
+
+    </div>
+
+    <div id="lista-receitas" class="lista-emitidas-container">
+      <h3>Receitas Emitidas</h3>
+      <ul>
+      </ul>
+    </div>
+
     </section>
 
     <!-- FICHA MÉDICA -->

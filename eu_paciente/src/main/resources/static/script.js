@@ -1,6 +1,11 @@
 // ==========================================================
 // 1. DECLARAÇÃO DAS CONSTANTES GLOBAIS
 // ==========================================================
+let medicamentosDaReceitaAtual = [];
+
+
+const btnAddMedicamento = document.getElementById('btn-add-medicamento');
+const listaMedicamentosAtualUI = document.getElementById('lista-medicamentos-atual');
 const inputCpf = document.getElementById('input-cpf');
 const inputPacienteId = document.getElementById('input-paciente-id');
 const inputPacienteNome = document.getElementById('input-paciente-nome');
@@ -25,6 +30,31 @@ const botaoSair = document.querySelector('.logout');
 // ==========================================================
 // 2. FUNÇÕES PARA BUSCAR DADOS DO BACKEND (API CALLS)
 // ==========================================================
+
+
+function renderMedicamentosAtuais() {
+    // Limpa a lista
+    listaMedicamentosAtualUI.innerHTML = '';
+
+    if (medicamentosDaReceitaAtual.length === 0) {
+        listaMedicamentosAtualUI.innerHTML = '<p>Nenhum medicamento adicionado.</p>';
+        return;
+    }
+
+    // Adiciona cada medicamento na UI
+    medicamentosDaReceitaAtual.forEach((med, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'medicamento-item-novo';
+
+        itemDiv.innerHTML = `
+            <strong>${med.nome}</strong>
+            <p>${med.dosagem}</p>
+            <button type="button" class="btn-remover-med" data-index="${index}">Remover</button>
+        `;
+
+        listaMedicamentosAtualUI.appendChild(itemDiv);
+    });
+}
 
 // --- CARREGA OS DADOS DO DASHBOARD ---
 async function carregarDashboard(){
@@ -122,8 +152,15 @@ async function atualizarStatusConsulta(consultaId, novoStatus) {
 // --- CARREGA AS RECEITAS EMITIDAS ---
 async function carregarReceitas() {
   listaReceitas.innerHTML = '<li>Carregando...</li>';
+
+  const idMedicoLogado = sessionStorage.getItem('idMedicoLogado');
+    if (!idMedicoLogado) {
+        listaReceitas.innerHTML = '<li>Erro: Médico não logado.</li>';
+        return;
+    }
+
   try {
-      const response = await fetch('http://localhost:8080/api/receitas');
+      const response = await fetch(`http://localhost:8080/api/receitas/medico/${idMedicoLogado}`);
       if (!response.ok) throw new Error('Falha ao buscar receitas.');
 
       const dados = await response.json();
@@ -137,7 +174,15 @@ async function carregarReceitas() {
       dados.forEach(receita => {
           const item = document.createElement("li");
 
-          item.textContent = `${receita.paciente.nome} - ${receita.nomeMedicamento}`;
+          let nomeMedicamento = "Receita sem medicamentos";
+          if (receita.medicamentos && receita.medicamentos.length > 0) {
+              nomeMedicamento = receita.medicamentos[0].nome;
+              if (receita.medicamentos.length > 1) {
+                  nomeMedicamento += ` (e mais ${receita.medicamentos.length - 1})`;
+              }
+          }
+
+          item.textContent = `Paciente: ${receita.paciente.nome} - ${nomeMedicamento}`;
           listaReceitas.appendChild(item);
       });
   } catch (error) {
@@ -176,6 +221,40 @@ async function buscarPacientePorCpf(cpf) {
 // 3. LÓGICA DE EVENTOS (Cliques, Envios de Formulário)
 // ==========================================================
 
+btnAddMedicamento?.addEventListener('click', () => {
+    const nome = inputMedicamento.value;
+    const dosagem = inputObservacoes.value;
+
+    if (!nome || !dosagem) {
+        alert('Por favor, preencha o nome do medicamento e a dosagem.');
+        return;
+    }
+
+    // Adiciona ao array
+    medicamentosDaReceitaAtual.push({ nome: nome, dosagem: dosagem });
+
+    // Atualiza a UI da direita
+    renderMedicamentosAtuais();
+
+    // Limpa os campos para o próximo
+    inputMedicamento.value = '';
+    inputObservacoes.value = '';
+    inputMedicamento.focus();
+});
+
+// Evento para os botões "Remover" (usando delegação de evento)
+listaMedicamentosAtualUI?.addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-remover-med')) {
+        const indexParaRemover = parseInt(e.target.dataset.index);
+
+        // Remove o item do array
+        medicamentosDaReceitaAtual.splice(indexParaRemover, 1);
+
+        // Atualiza a UI
+        renderMedicamentosAtuais();
+    }
+});
+
 // --- CONTROLA A NAVEGAÇÃO ENTRE AS TELAS E CHAMA A FUNÇÃO DE CARREGAMENTO CORRETA ---
 function mostrarTela(id) {
   document.querySelectorAll(".conteudo").forEach(t => t.classList.remove("ativo"));
@@ -202,27 +281,37 @@ function mostrarTela(id) {
 formReceita?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  if (!inputPacienteId.value) {
-        alert("Por favor, preencha um CPF válido e aguarde o nome ser preenchido.");
+const idPaciente = inputPacienteId.value;
+  const idMedico = sessionStorage.getItem('idMedicoLogado');
+
+  // --- Validações ---
+  if (!idPaciente) {
+        alert("Por favor, busque um paciente pelo CPF primeiro.");
         return;
-    }
+  }
+  if (!idMedico) {
+        alert("Erro crítico: Médico não logado.");
+        return;
+  }
+  // Validação mais importante:
+  if (medicamentosDaReceitaAtual.length === 0) {
+        alert("Você precisa adicionar pelo menos um medicamento à receita antes de gerá-la.");
+        return;
+  }
 
 try {
-    const pacienteId = inputPacienteId.value;
-        const medicamento = inputMedicamento.value;
-        const observacoes = inputObservacoes.value;
+    // 1. O objeto `novaReceita` agora usa o ARRAY
+    const novaReceita = {
+        id_paciente: parseInt(idPaciente),
+        id_medico: parseInt(idMedico),
+        medicamentos: medicamentosDaReceitaAtual // <-- MUDANÇA PRINCIPAL
+    };
 
-        const dados = {
-          pacienteId: pacienteId,
-          nomeMedicamento: medicamento,
-          descricaoUsoMedicamento: observacoes
-        };
-
-    // 4. Enviar os dados para o backend
+    // 2. Enviar os dados para o backend (O endpoint está correto)
     const response = await fetch('http://localhost:8080/api/receitas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dados)
+      body: JSON.stringify(novaReceita)
     });
 
     if (!response.ok) {
@@ -230,16 +319,24 @@ try {
     }
 
     // 5. Se deu tudo certo:
-    carregarReceitas();
-    formReceita.reset();
     alert("Receita gerada e salva com sucesso!");
 
+    // Limpa o formulário e o array
+    formReceita.reset();
+    inputPacienteId.value = '';
+    inputPacienteNome.value = '';
+    medicamentosDaReceitaAtual = []; // Limpa o array
+    renderMedicamentosAtuais(); // Limpa a UI da direita
+
+    carregarReceitas(); // Atualiza a lista de "Receitas Emitidas"
+
   } catch (error) {
-    // 6. Se deu algum erro na comunicação:
+    // 6. Se deu algum erro:
     console.error("Erro ao gerar receita:", error);
-    alert("Não foi possível salvar a receita. Verifique o console para mais detalhes.");
+    alert("Não foi possível salvar a receita. Verifique o console.");
   }
 });
+
 
 // --- ATUALIZAÇÃO DE STATUS DA CONSULTA ---
 tabelaAgenda.addEventListener('change', (event) => {

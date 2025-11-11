@@ -31,21 +31,26 @@ public class ReceitaController {
     }
 
 
-
-    /*@PostMapping
-    public ResponseEntity<Receita> criarReceita(@RequestBody ReceitaDTO receitaDTO) throws Exception{
+    @PostMapping
+    public ResponseEntity<Receita> criarReceita(@RequestBody Receita receita) throws Exception{
         try {
-            Receita receitaSalva = receitaService.criar(receitaDTO);
-            return ResponseEntity.ok(receitaSalva);
+            Receita receitaSalva = receitaService.criar(receita);
+            return ResponseEntity.status(HttpStatus.CREATED).body(receitaSalva);
 
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            System.err.println("Erro ao criar receita: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-    }*/
+    }
 
-    @GetMapping("")
-    public ResponseEntity<List<Receita>> listarTodasAsReceitas() {
-        List<Receita> receitas = receitaService.listarTodas();
-        return ResponseEntity.ok(receitas);
+    @GetMapping("/medico/{idMedico}")
+    public ResponseEntity<List<Receita>> listarReceitasDoMedico(@PathVariable Long idMedico) {
+        try {
+            List<Receita> receitas = receitaService.listarPorMedico(idMedico);
+            return ResponseEntity.ok(receitas);
+        } catch (Exception e) {
+            System.err.println("Erro ao listar receitas: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }
