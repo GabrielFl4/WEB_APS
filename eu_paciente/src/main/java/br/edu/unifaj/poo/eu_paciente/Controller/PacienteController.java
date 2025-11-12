@@ -6,6 +6,7 @@ import br.edu.unifaj.poo.eu_paciente.DAO.PacienteDAO;
 import br.edu.unifaj.poo.eu_paciente.Model.Paciente;
 import br.edu.unifaj.poo.eu_paciente.Service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,4 +75,20 @@ public class PacienteController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/ficha/{idPaciente}")
+    public ResponseEntity<Paciente> getFichaMedica(@PathVariable Long idPaciente) {
+        try {
+            Paciente fichaCompleta = pacienteService.buscarFichaCompleta(idPaciente);
+            return ResponseEntity.ok(fichaCompleta);
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+
+            System.err.println("Erro ao buscar ficha completa: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }

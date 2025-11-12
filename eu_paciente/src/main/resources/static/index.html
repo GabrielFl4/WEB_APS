@@ -69,7 +69,7 @@
 
     <!-- AGENDA -->
     <section id="agenda" class="conteudo">
-      <h2>Agenda do Dia</h2>
+      <h2>Suas Consultas do dia:</h2>
       <table>
         <thead>
           <tr>
@@ -134,13 +134,19 @@
 
     <!-- FICHA MÉDICA -->
     <section id="ficha" class="conteudo">
-      <h2>Ficha Médica do Paciente</h2>
-      <div class="ficha">
-        <p><strong>Nome:</strong> Ana Souza</p>
-        <p><strong>Idade:</strong> 32 anos</p>
-        <p><strong>Histórico:</strong> Hipertensão leve, acompanhamento anual.</p>
-        <p><strong>Última consulta:</strong> 02/10/2025</p>
+      <h2>Buscar Ficha Médica do Paciente</h2>
+
+      <div class="form-receita-container">
+        <div class="form-coluna-esquerda" style="flex: 1;">
+          <label for="ficha-input-cpf">CPF do Paciente:</label>
+          <input type="text" id="ficha-input-cpf" placeholder="Digite o CPF e pressione Enter ou clique em Buscar">
+          <button type="button" id="ficha-btn-buscar" class="btn-principal">Buscar</button>
+        </div>
       </div>
+
+      <div id="ficha-resultado-container" style="display: none;">
+      </div>
+
     </section>
 
     <!-- FINANCEIRO -->

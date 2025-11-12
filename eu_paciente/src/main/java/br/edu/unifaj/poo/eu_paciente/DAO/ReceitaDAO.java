@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,24 @@ public class ReceitaDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    public int contarReceitasPorDia(Long idMedico, LocalDate data) {
+        String querySQL = "SELECT COUNT(*) FROM receita WHERE id_medico = ? AND data = ?;";
+
+        try {
+            Integer count = jdbcTemplate.queryForObject(
+                    querySQL,
+                    new Object[]{idMedico, java.sql.Date.valueOf(data)},
+                    Integer.class
+            );
+
+            return (count != null) ? count : 0;
+
+        } catch (Exception e) {
+            System.err.println("Erro ao contar receitas: " + e.getMessage());
+            return 0;
+        }
+    }
 
     public Long adicionarReceita(Receita receita) throws Exception {
 
@@ -48,8 +67,6 @@ public class ReceitaDAO {
     }
 
     public void adicionarMedicamento(Medicamento medicamento) throws Exception {
-
-        System.out.println("[DEBUG DAO] Inserindo medicamento: " + medicamento.getNome());
 
         String insertSQL = "INSERT INTO medicamento (nome, dosagem, id_receita) VALUES (?, ?, ?);";
 

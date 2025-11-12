@@ -38,11 +38,13 @@ public class ReceitaService {
         return listaDeMedicamentos;
     }
 
+    public int contarReceitasDeHoje(Long idMedico) {
+        LocalDate hoje = LocalDate.now();
+        return dao.contarReceitasPorDia(idMedico, hoje);
+    }
+
     @Transactional
     public Receita criar(Receita receita) throws Exception{
-
-        System.out.println("[DEBUG Service] Receita recebida. N° de Medicamentos: " +
-                (receita.getMedicamentos() != null ? receita.getMedicamentos().size() : "null"));
 
     receita.setData(LocalDate.now());
 

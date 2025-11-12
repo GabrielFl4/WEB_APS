@@ -58,6 +58,27 @@ public class PacienteDAO {
         }
     }
 
+    public Paciente findByCpf(String cpf) {
+        String querySQL = "SELECT * FROM paciente WHERE cpf = ?;";
+
+        try (Connection con = jdbcTemplate.getDataSource().getConnection();
+             PreparedStatement ps = con.prepareStatement(querySQL)) {
+
+            ps.setString(1, cpf);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return getPaciente(rs); // Reutiliza seu helper
+                } else {
+                    return null; // Não encontrou
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar paciente por CPF: " + e.getMessage());
+            return null;
+        }
+    }
+
     public int  atualizarPaciente(Long idPaciente, String telefone, String complemento) throws Exception {
         String updateSQL = "UPDATE paciente " +
                 "SET telefone = ?, complemento = ? " +
