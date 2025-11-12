@@ -314,6 +314,69 @@ tr:hover {
   line-height: 1.6;
 }
 
+#ficha-resultado-container {
+    margin-top: 20px;
+}
+
+.ficha-layout {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Para telas menores */
+}
+
+.ficha-coluna {
+    flex: 1;
+    min-width: 300px;
+}
+
+.ficha-coluna h3 {
+    color: #005792;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.ficha-box {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Scroll para as listas de histórico */
+.ficha-box.lista-scroll {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.item-historico {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.item-historico:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+.item-historico strong {
+    color: #333;
+}
+.item-historico p {
+    font-size: 0.9em;
+    color: #555;
+    margin: 4px 0 0 0;
+}
+.item-historico ul {
+    list-style-position: inside;
+    padding-left: 5px;
+    margin-top: 5px;
+}
+.item-historico li {
+    font-size: 0.85em;
+    color: #666;
+}
+
 /* ==========================================================
    RESPONSIVIDADE (Celulares e Tablets)
    ========================================================== */
