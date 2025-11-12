@@ -1,5 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS databaseBonitinho;
-SET SCHEMA databaseBonitinho;
+    SET SCHEMA databaseBonitinho;
 
 CREATE TABLE IF NOT EXISTS paciente (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -78,9 +78,9 @@ KEY (data, id_paciente, id_medico) VALUES
   (TIMESTAMP '2025-11-10 08:00:00', 325.00, TRUE,  'CONSULTA_INICIAL', 'Gripe comum',            'CONFIRMADA', 3, 3),
   (TIMESTAMP '2025-11-10 13:45:00', 550.00, FALSE, 'CONSULTA_INICIAL', 'Filho com conjuntivite', 'CONFIRMADA', 3, 1),
   (TIMESTAMP '2025-11-10 15:30:00', 375.00, FALSE, 'RETORNO',  'Impotência sexual',      'PENDENTE',   3, 2),
-  (TIMESTAMP '2025-11-10 09:30:00', 250.00, TRUE,  'RETORNO',  'Dor no joelho',          'CONFIRMADA', 2, 5),
+  (TIMESTAMP '2025-11-12 09:30:00', 250.00, TRUE,  'RETORNO',  'Dor no joelho',          'CONFIRMADA', 2, 5),
   (TIMESTAMP '2025-11-10 08:00:00', 425.00, TRUE,  'EXAMES', 'Dor de cabeça',          'CONFIRMADA', 2, 4),
-  (TIMESTAMP '2025-11-10 10:00:00', 187.00, TRUE,  'RETORNO',  'Dor na coluna',          'CONFIRMADA', 1, 5),
+  (TIMESTAMP '2025-11-12 10:00:00', 187.00, TRUE,  'RETORNO',  'Dor na coluna',          'CONFIRMADA', 1, 5),
   (TIMESTAMP '2025-11-10 09:30:00', 225.00, FALSE, 'EXAMES', 'Dor ao urinar',          'PENDENTE',   1, 2),
   (TIMESTAMP '2025-11-10 13:30:00', 350.00, FALSE, 'RETORNO',  'Memória curta',          'CONFIRMADA',   1, 4);
 

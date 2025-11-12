@@ -3,14 +3,15 @@ package br.edu.unifaj.poo.eu_paciente.DAO;
 
 import br.edu.unifaj.poo.eu_paciente.Model.Medicamento;
 import br.edu.unifaj.poo.eu_paciente.Model.Medico;
+import br.edu.unifaj.poo.eu_paciente.Model.Paciente;
 import br.edu.unifaj.poo.eu_paciente.Model.Receita;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,76 @@ public class ReceitaDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    public Long adicionarReceita(Receita receita) throws Exception {
+
+        String insertSQL = "INSERT INTO receita (data, id_paciente, id_medico) VALUES (?, ?, ?);";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        try {
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
+                ps.setDate(1, Date.valueOf(receita.getData()));
+                ps.setInt(2, receita.getId_paciente());
+                ps.setInt(3, receita.getId_medico());
+                return ps;
+            }, keyHolder);
+
+            // Retorna o ID que o banco acabou de gerar
+            if (keyHolder.getKey() != null) {
+                return keyHolder.getKey().longValue();
+            } else {
+                throw new Exception("Falha ao obter o ID da receita gerada.");
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao adicionar receita: " + e.getMessage(), e);
+        }
+    }
+
+    public void adicionarMedicamento(Medicamento medicamento) throws Exception {
+
+        System.out.println("[DEBUG DAO] Inserindo medicamento: " + medicamento.getNome());
+
+        String insertSQL = "INSERT INTO medicamento (nome, dosagem, id_receita) VALUES (?, ?, ?);";
+
+        try {
+            // REMOVIDA a conexão manual e usado o update direto.
+            // Isso garante que ele participe da transação (@Transaction) do ReceitaService.
+            jdbcTemplate.update(insertSQL,
+                    medicamento.getNome(),
+                    medicamento.getDosagem(),
+                    medicamento.getId_receita()
+            );
+        } catch (Exception e) {
+            throw new Exception("Erro ao adicionar medicamento: " + e.getMessage(), e);
+        }
+    }
+
+    public List<Receita> receitasPorMedico(Long id_medico) throws Exception {
+        String querySQL = "SELECT receita.id, receita.data, receita.id_paciente, medico.id AS id_medico, medico.nome AS nome_medico, medico.especialidade, paciente.nome AS nome_paciente " +
+                "FROM receita " +
+                "LEFT JOIN medico ON receita.id_medico = medico.id " +
+                "LEFT JOIN paciente ON receita.id_paciente = paciente.id " +
+                "WHERE receita.id_medico = ? " +
+                "ORDER BY receita.data DESC;";
+
+        try (Connection con = jdbcTemplate.getDataSource().getConnection();
+             PreparedStatement ps = con.prepareStatement(querySQL)) {
+
+            ps.setLong(1, id_medico);
+            List<Receita> receitas = new ArrayList<>();
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    Receita r = getReceitaDoMedico(rs);
+                    receitas.add(r);
+                }
+            }
+            return receitas;
+        }
+    }
 
     public List<Receita> receitaPorPaciente(Long id_paciente) throws Exception {
         String querySQL = "SELECT receita.id, receita.data, receita.id_paciente, medico.id AS id_medico, medico.nome, medico.especialidade, paciente.id AS id_paciente " +
@@ -70,6 +141,20 @@ public class ReceitaDAO {
         r.setId_paciente(rs.getInt("id_paciente"));
         r.setId_medico(rs.getInt("id_medico"));
     return r;
+    }
+
+    private static Receita getReceitaDoMedico(ResultSet rs) throws Exception{
+        Receita r = new Receita();
+        r.setId((long) rs.getInt("id"));
+        r.setData(rs.getDate("data").toLocalDate());
+        r.setId_paciente(rs.getInt("id_paciente"));
+        r.setId_medico(rs.getInt("id_medico"));
+
+        if (rs.getString("nome_paciente") != null) {
+            r.setPaciente(new Paciente(rs.getString("nome_paciente")));
+        }
+
+        return r;
     }
 
     private static Medicamento getMedicamentos(ResultSet rs) throws Exception{
