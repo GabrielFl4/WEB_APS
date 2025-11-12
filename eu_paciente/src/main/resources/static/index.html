@@ -34,6 +34,10 @@
   <li onclick="mostrarTela('financeiro')">
     <img src="img/cartao-de-credito.png" alt="Financeiro" class="icon"> Financeiro
   </li>
+  <li onclick="mostrarTela('sincronia')">
+    <img src="img/sync.png" alt="Sincronização" class="icon"> Sincronização
+  </li>
+
 </ul>
   </div>
 
@@ -154,8 +158,35 @@
         </tbody>
       </table>
     </section>
+
+    <section id="sincronia" class="conteudo">
+      <div class="sync-container">
+        <div class="sync-hero">
+          <img src="img/tech.png" alt="Sincronia" class="sync-icon">
+          <h2 class="sync-title">Sincronia</h2>
+        </div>
+
+        <div class="sync-badge">⚠️ Zona de Teste</div>
+
+        <div class="card sync-card">
+          <h3 class="sync-heading">TESTE DE SINCRONIZAÇÃO</h3>
+          <p class="sync-desc">
+            Ao clicar no botão abaixo, o painel envia um evento para o backend.
+            Todos os apps com a tela de sincronia aberta recebem o sinal, tocam um som
+            e exibem uma confirmação visual.
+          </p>
+
+          <button id="btn-sync-apresentacao" class="btn-warning btn-compact">
+            DISPARAR!
+          </button>
+
+          <div id="sincronia-status" class="sync-status" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script src="script.js?v=2"></script>
+  <script src="sync.js"></script>
 </body>
 </html>

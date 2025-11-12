@@ -388,6 +388,102 @@ tr:hover {
     right: 10px;
 }
 
+/* ====== SINCRONIA (escopo local da página) ====== */
+#sincronia .sync-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 8px 14px 40px;
+}
+
+/* -- Sincronia: botão menor e laranja -- */
+#sincronia .btn-compact{
+  min-width: 200px;          /* menor que o antigo wide */
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+#sincronia .btn-warning{
+  background: #E86A17;       /* laranja com leve tom avermelhado */
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 0 rgba(0,0,0,.08),
+              0 6px 16px rgba(232,106,23,.18);
+  transition: filter .15s ease, transform .02s ease;
+}
+
+#sincronia .btn-warning:hover{  filter: brightness(.95); }
+#sincronia .btn-warning:active{ transform: translateY(1px); }
+#sincronia .btn-warning:disabled{ opacity:.7; cursor:not-allowed; }
+
+#sincronia .sync-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 6px 0 10px;
+}
+
+#sincronia .sync-icon {
+  width: 36px; height: 36px;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.15));
+  opacity: .95;
+}
+
+#sincronia .sync-title {
+  margin: 0;
+  font-size: 28px;
+  color: #0C0C0C;
+}
+
+#sincronia .sync-badge {
+  width: fit-content;
+  margin: 6px auto 18px;
+  padding: 6px 12px;
+  background: #FFF6DB;
+  color: #7A5C11;
+  border: 1px dashed #E5C87A;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+#sincronia .sync-card {
+  text-align: center;
+  padding: 28px 32px;
+}
+
+#sincronia .sync-heading {
+  margin: 0 0 18px;
+  font-size: 26px;
+  letter-spacing: .3px;
+}
+
+#sincronia .sync-desc {
+  margin: 0 auto 22px;
+  max-width: 680px;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+#sincronia .btn-wide {
+  min-width: 260px;
+}
+
+/* status de envio/resultado */
+#sincronia .sync-status {
+  margin-top: 14px;
+  font-weight: 600;
+  color: #245C9B; /* default: informativo */
+}
+#sincronia .sync-status.is-ok {
+  color: #2E7D32; /* verde ok */
+}
+#sincronia .sync-status.is-error {
+  color: #B00020; /* vermelho erro */
+}
+
 .btn-remover-med:hover {
     background-color: #b52b27;
 }

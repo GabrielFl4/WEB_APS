@@ -67,22 +67,27 @@ KEY (email) VALUES
 
 MERGE INTO medico (nome, email, senha, especialidade)
 KEY (email) VALUES
-  ('Dr. Jascinto Pinto de Oliveira', 'jascinto@gmail.com', '123456', 'Pediatra'),
-  ('Dra. Paula Vadinho Santana',     'paula@gmail.com',    '123456', 'Urologista'),
-  ('Dr. Sujiro Kimimame Nakamura',   'sujiro@gmail.com',   '123456', 'Clínico Geral'),
-  ('Dra. Eva Gina de Souza',         'eva@gmail.com',      '123456', 'Neurologista'),
-  ('Dr. Takamassa Numuro',           'takamassa@gmail.com','123456', 'Ortopedista');
+  ('Dr. João Ricardo de Oliveira', 'joao@gmail.com', '123456', 'Pediatra'),
+  ('Dra. Paula Santana',           'paula@gmail.com',    '123456', 'Urologista'),
+  ('Dr. Kenji Nakamura',           'nakamura@gmail.com',   '123456', 'Clínico Geral'),
+  ('Dra. Eva Souza',               'eva@gmail.com',      '123456', 'Neurologista'),
+  ('Dr. Takashi Nomura',           'takashi@gmail.com','123456', 'Ortopedista');
 
 MERGE INTO consulta (data, valor, pago, rotina, sintomas, status, id_paciente, id_medico)
 KEY (data, id_paciente, id_medico) VALUES
-  (TIMESTAMP '2025-11-10 08:00:00', 325.00, TRUE,  'CONSULTA_INICIAL', 'Gripe comum',            'CONFIRMADA', 3, 3),
-  (TIMESTAMP '2025-11-10 13:45:00', 550.00, FALSE, 'CONSULTA_INICIAL', 'Filho com conjuntivite', 'CONFIRMADA', 3, 1),
-  (TIMESTAMP '2025-11-10 15:30:00', 375.00, FALSE, 'RETORNO',  'Impotência sexual',      'PENDENTE',   3, 2),
-  (TIMESTAMP '2025-11-12 09:30:00', 250.00, TRUE,  'RETORNO',  'Dor no joelho',          'CONFIRMADA', 2, 5),
-  (TIMESTAMP '2025-11-10 08:00:00', 425.00, TRUE,  'EXAMES', 'Dor de cabeça',          'CONFIRMADA', 2, 4),
-  (TIMESTAMP '2025-11-12 10:00:00', 187.00, TRUE,  'RETORNO',  'Dor na coluna',          'CONFIRMADA', 1, 5),
-  (TIMESTAMP '2025-11-10 09:30:00', 225.00, FALSE, 'EXAMES', 'Dor ao urinar',          'PENDENTE',   1, 2),
-  (TIMESTAMP '2025-11-10 13:30:00', 350.00, FALSE, 'RETORNO',  'Memória curta',          'CONFIRMADA',   1, 4);
+  -- Paciente 3: tem dia 12 e outras posteriores
+  (TIMESTAMP '2025-11-12 08:15:00', 325.00, TRUE,  'CONSULTA_INICIAL', 'Gripe comum',              'CONFIRMADA', 3, 3),
+  (TIMESTAMP '2025-11-16 13:45:00', 550.00, FALSE, 'CONSULTA_INICIAL', 'Filho com conjuntivite',   'CONFIRMADA', 3, 1),
+  (TIMESTAMP '2025-12-12 15:30:00', 375.00, FALSE, 'RETORNO',           'Alergia',                  'PENDENTE',   3, 2),
+
+  -- Paciente 2: já tinha dia 12 e ganhou outra posterior
+  (TIMESTAMP '2025-11-12 09:30:00', 250.00, TRUE,  'RETORNO',           'Dor no joelho',            'CONFIRMADA', 2, 5),
+  (TIMESTAMP '2025-11-14 08:45:00', 425.00, TRUE,  'EXAMES',            'Dor de cabeça',            'CONFIRMADA', 2, 4),
+
+  -- Paciente 1: já tinha dia 12 e ganhou outras posteriores
+  (TIMESTAMP '2025-11-12 10:00:00', 187.00, TRUE,  'RETORNO',           'Dor na coluna',            'CONFIRMADA', 1, 5),
+  (TIMESTAMP '2025-11-18 09:50:00', 225.00, FALSE, 'EXAMES',            'Dor ao urinar',            'PENDENTE',   1, 2),
+  (TIMESTAMP '2025-12-16 13:30:00', 350.00, FALSE, 'RETORNO',           'Memória curta',            'CONFIRMADA', 1, 4);
 
 MERGE INTO receita (id, data, id_paciente, id_medico) KEY (id) VALUES
   (1, '2025-10-10', 1, 1),
