@@ -24,6 +24,9 @@ const tabelaAgenda = document.getElementById('tabela-agenda');
 const formReceita = document.getElementById('form-receita');
 const listaReceitas = document.querySelector("#lista-receitas ul");
 
+const SYNC_TOPIC = "apresentacao";
+const SYNC_BASE  = "http://localhost:8080";
+
 
 const botaoSair = document.querySelector('.logout');
 
@@ -191,6 +194,47 @@ async function carregarReceitas() {
   }
 }
 
+function configurarSincronia() {
+  const btn = document.getElementById('btn-sync-apresentacao');
+  const status = document.getElementById('sincronia-status');
+  if (!btn || !status) return;
+
+  const clone = btn.cloneNode(true);
+  btn.parentNode.replaceChild(clone, btn);
+  const disparar = document.getElementById('btn-sync-apresentacao');
+
+  status.className = 'sync-status';
+  status.textContent = '';
+
+  disparar.addEventListener('click', async () => {
+    disparar.disabled = true;
+    status.className = 'sync-status';
+    status.textContent = 'Enviando...';
+
+    try {
+      const resp = await fetch(`${SYNC_BASE}/sync/trigger/${SYNC_TOPIC}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ msg: 'SHOW_OK' })
+      });
+
+      if (!resp.ok) {
+        const txt = await resp.text().catch(() => resp.statusText);
+        throw new Error(txt || 'Falha no disparo');
+      }
+
+      status.className = 'sync-status is-ok';
+      status.textContent = 'Sinal enviado ✔';
+    } catch (e) {
+      status.className = 'sync-status is-error';
+      status.textContent = 'Erro ao enviar';
+      console.error('Sync trigger error:', e);
+    } finally {
+      setTimeout(() => (disparar.disabled = false), 600);
+    }
+  });
+}
+
 async function buscarPacientePorCpf(cpf) {
     if (cpf.length !== 11) return;
 
@@ -273,6 +317,9 @@ function mostrarTela(id) {
     case 'receitas':
       carregarReceitas();
       break;
+    case 'sincronia':
+       configurarSincronia();
+       break;
     // Adicione casos para 'ficha' e 'financeiro' quando os endpoints existirem
   }
 }

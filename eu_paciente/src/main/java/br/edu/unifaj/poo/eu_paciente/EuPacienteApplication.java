@@ -10,5 +10,6 @@ public class EuPacienteApplication {
 		SpringApplication.run(EuPacienteApplication.class, args);
 		System.out.println();
 		System.out.println("Servidor Iniciado!");
+		System.out.println("Versão Experimental 12.11.25");
 	}
 }
